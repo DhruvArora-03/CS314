@@ -43,7 +43,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     public boolean add(E value) {
         // check preconditions
         if (value == null) {
-            throw new IllegalArgumentException("Cannot add null to a BinarySearchTree");
+            throw new IllegalArgumentException("item cannot be null");
         }
         // tree empty --> create root
         else if (root == null) {
@@ -99,61 +99,23 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         size() = old size() - 1
      */
     public boolean remove(E value) {
-        // check preconditions
-        if (value == null) {
-            throw new IllegalArgumentException("Cannot remove null from a BinarySearchTree");
-        }
-        // tree empty --> nothing to remove
-        else if (root == null) {
-            return false;
-        }
-
-        // else --> recurse
-        return remove(root, value);
+        return false;
     }
 
-    private boolean remove(BinarySearchTree.BSTNode<E> root2, E value) {
-        // if the value is less than the root, go left
-        if (root2.getData().compareTo(value) > 0) {
-            if (root2.getLeft() == null) {
-                return false;
-            } else {
-                return remove(root2.getLeft(), value);
-            }
+    /**
+     * Find the smallest element in the tree rooted at the specified node.
+     * 
+     * @param node the node to start the search at
+     * @return the smallest element in the 
+     */
+    private BSTNode<E> findSmallest(BSTNode<E> node) {
+        // if we can't go left --> we are at smallest
+        if (node.getLeft() == null) {
+            return node;
         }
-        // if the value is greater than the root, go right
-        else if (root2.getData().compareTo(value) < 0) {
-            if (root2.getRight() == null) {
-                return false;
-            } else {
-                return remove(root2.getRight(), value);
-            }
-        }
-        // if the value is the root, remove it
-        else {
-            // if the root has no children, remove it
-            if (root2.getLeft() == null && root2.getRight() == null) {
-                root2 = null;
-                return true;
-            }
-            // if the root has one child, remove it
-            else if (root2.getLeft() == null || root2.getRight() == null) {
-                if (root2.getLeft() == null) {
-                    root2 = root2.getRight();
-                } else {
-                    root2 = root2.getLeft();
-                }
-                return true;
-            }
-            // if the root has two children, find the smallest value in the right subtree
-            // and replace the root with that value
-            else {
-                BinarySearchTree.BSTNode<E> smallest = findSmallest(root2.getRight());
-                root2.setData(smallest.getData());
-                remove(root2.getRight(), smallest.getData());
-                return true;
-            }
-        }
+        
+        // go left
+        return findSmallest(node.getLeft());
     }
 
     /**

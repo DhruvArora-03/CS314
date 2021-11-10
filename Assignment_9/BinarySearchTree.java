@@ -99,7 +99,69 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         size() = old size() - 1
      */
     public boolean remove(E value) {
-        return false;
+        // check preconditions
+        if (value == null) {
+            throw new IllegalArgumentException("item cannot be null");
+        }
+        // tree empty --> nothing to remove
+        else if (root == null) {
+            return false;
+        }
+
+        // else --> recurse
+        return remove(root, value);
+    }
+
+    /**
+     * Helper method for remove()
+     * 
+     * @param node the current node we are attempting to remove at
+     * @param value the value which we wish to remove
+     * @return true/false if the value was removed or not
+     * 
+     */
+    private boolean remove(BSTNode<E> node, E value) {
+        // remove from left if possible, otherwise go into left subtree
+        if (node.getData().compareTo(value) > 0) {
+            if (node.getLeft() == null) {
+                return false;
+            } else {
+                return remove(node.getLeft(), value);
+            }
+        }
+        // remove from right if possible, otherwise go into right subtree
+        else if (node.getData().compareTo(value) < 0) {
+            if (node.getRight() == null) {
+                return false;
+            } else {
+                return remove(node.getRight(), value);
+            }
+        }
+        // remove at node and handle children, if any
+        else {
+            // no children --> remove node
+            if (node.getLeft() == null && node.getRight() == null) {
+                node = null;
+                return true;
+            }
+            // one child --> replace node with child
+            else if (node.getLeft() == null) {
+                node = node.getRight();
+            } else if (node.getRight() == null) {
+                node = node.getLeft();
+            }
+            // two children --> find smallest value in right subtree and replace
+            else {
+                // find smallest element in right subtree
+                BSTNode<E> smallest = findSmallest(node.getRight());
+                // remove smallest element from right subtree
+                remove(node.getRight(), smallest.getData());
+                // set node to smallest element
+                node.setData(smallest.getData());
+            }
+
+            return true;
+        }
     }
 
     /**

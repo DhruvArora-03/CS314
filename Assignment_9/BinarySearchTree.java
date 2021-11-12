@@ -115,28 +115,30 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         }
         // the value to remove is at root
         else if (root.data.equals(value)) {
-            // no children --> remove root
-            if (root.left == null && root.right == null) {
-                root = null;
-            }
-            // one child --> set child as root
-            else if (root.left == null || root.right == null) {
-                root = root.left == null ? root.left : root.right;
-            }
-            // two children --> set smallest in the right tree as the new root
-            else {
-                BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
-                // set root's left and right to the left and right of the new root
-                parentOfSmallest.left.left = root.left;
-                parentOfSmallest.left.right = root.right;
-                root = parentOfSmallest.left;
-                // delete the reference to the new root's old position
-                if (parentOfSmallest.left.right != null) {
-                    parentOfSmallest.left = parentOfSmallest.left.right;
-                } else {
-                    parentOfSmallest.left = null;
-                }
-            }
+            root = removeNode(root);
+            // // no children --> remove root
+            // if (root.left == null && root.right == null) {
+            //     root = null;
+            // }
+            // // one child --> set child as root
+            // else if (root.left == null || root.right == null) {
+            //     root = root.left == null ? root.left : root.right;
+            // }
+            // // two children --> set smallest in the right tree as the new root
+            // else {
+                
+            //     BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
+            //     // set root's left and right to the left and right of the new root
+            //     parentOfSmallest.left.left = root.left;
+            //     parentOfSmallest.left.right = root.right;
+            //     root = parentOfSmallest.left;
+            //     // delete the reference to the new root's old position
+            //     if (parentOfSmallest.left.right != null) {
+            //         parentOfSmallest.left = parentOfSmallest.left.right;
+            //     } else {
+            //         parentOfSmallest.left = null;
+            //     }
+            // }
             size--;
             return true;
         }
@@ -159,15 +161,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             if (node.left == null) {
                 return false;
             } else if (node.left.data.equals(value)) {
-                // no children
-                if (node.left.left == null && node.left.right == null) {
-                    node.left = null;
-                }
-                // one child
-                else if (node.left.left == null || node.left.right == null) {
-                    node.left = node.left.left == null ? node.left.right : node.left.left;
-                }
-
+                node.left = removeNode(node.left);
                 size--;
                 return true;
             }
@@ -176,9 +170,43 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         }
         // value is on the right (value should never be in this node)
         else {
+            if (node.right == null) {
+                return false;
+            } else if (node.right.data.equals(value)) {
+                node.right = removeNode(node.right);
+                size--;
+                return true;
+            }
 
+            return remove(node.right, value);
         }
-        return false;
+    }
+
+    /**
+     * Removes the given node and returns the node that should 'replace' it
+     * 
+     * @param node the BSTNode<E> to be removed
+     * @return the new node that should replace the removed one
+     */
+    private BSTNode<E> removeNode(BSTNode<E> node) {
+        // no children --> no need to replace
+        if (node.left == null && node.right == null) {
+            return null;
+        }
+        // one child --> gets replaced by child
+        else if (node.left == null || node.right == null) {
+            return node.left == null ? node.right : node.left;
+        }
+        // two children --> gets replaced by the smallest node in the right tree
+        else {
+            BSTNode<E> parentOfSmallest = findParentOfSmallest(node);
+            // save the node so that reference isn't lost when removing smallest from tree
+            BSTNode<E> newNode = new BSTNode<E>(node.left, parentOfSmallest.left.data, node.right);
+            // delete the reference to the new node's old position
+            parentOfSmallest.left = removeNode(parentOfSmallest.left);
+
+            return newNode;
+        }
     }
 
     /**

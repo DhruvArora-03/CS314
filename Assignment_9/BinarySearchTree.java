@@ -217,12 +217,14 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the smallest element in the
      */
     private BSTNode<E> findParentOfSmallest(BSTNode<E> node) {
+
+        //TODO: fuck you (never checked if node.left is null so exception)
         // if the left child doesn't have a child --> we are at parent of smallest
-        if (node.getLeft().getLeft() == null) {
+        if (node.left.left == null) {
             return node;
         }
 
-        return findParentOfSmallest(node.getLeft());
+        return findParentOfSmallest(node.left);
     }
 
     /**

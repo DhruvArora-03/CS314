@@ -10,9 +10,8 @@
  * using: 0
  */
 
-import java.security.cert.TrustAnchor;
+import java.util.ArrayList;
 import java.util.List;
-import javax.swing.plaf.basic.BasicTreeUI.TreeCancelEditingAction;
 
 /**
  * Shell for a binary search tree class.
@@ -276,6 +275,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Helper method for size()
      * 
+     * @param node the node we are at
      * @return the number of elements in this subtree
      */
     private int size(BSTNode<E> node) {
@@ -296,7 +296,23 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the height of this tree or -1 if the tree is empty
      */
     public int height() {
-        return -2;
+        return root == null ? -1 : height(root);
+    }
+
+    /**
+     * Helper method for height()
+     * 
+     * @param node the node we are at
+     * @return the height of this subtree
+     */
+    private int height(BSTNode<E> node) {
+        if (node == null) {
+            return 0;
+        }
+        // find max height in the child subtrees
+        int maxChildHeight = Math.max(height(node.left), height(node.right));
+        // we only 'include' this node if it has a child
+        return maxChildHeight == 0 ? 0 : 1 + maxChildHeight;
     }
 
     /**
@@ -309,7 +325,22 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         an empty List
      */
     public List<E> getAll() {
-        return null;
+        List<E> result = new ArrayList<>();
+        getAll(result, root);
+        return result;
+    }
+
+    /**
+     * Helper method for getAll()
+     * 
+     * @return a List<E> of all
+     */
+    private void getAll(List<E> result, BSTNode<E> node) {
+        if (node != null) {
+            getAll(result, node.left);
+            result.add(node.data);
+            getAll(result, node.right);
+        }
     }
 
     /**
@@ -320,7 +351,21 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the maximum value in this tree
      */
     public E max() {
-        return null;
+        return max(root);
+    }
+
+    /**
+     * Helper method for max()
+     * 
+     * @param node the node we are currently at
+     * @return the maximum value in this subtree
+     */
+    private E max(BSTNode<E> node) {
+        if (node.right != null) {
+            return max(node.right);
+        }
+
+        return node.data;
     }
 
     /**
@@ -331,7 +376,8 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the minimum value in this tree
      */
     public E min() {
-        return null;
+        // we can reuse the remove() helper method
+        return findParentOfSmallest(root).left.data;
     }
 
     /**

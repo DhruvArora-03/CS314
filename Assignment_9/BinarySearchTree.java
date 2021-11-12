@@ -116,19 +116,27 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         // the value to remove is at root
         else if (root.data.equals(value)) {
             // no children --> remove root
-            if (root.getLeft() == null && root.getRight() == null) {
+            if (root.left == null && root.right == null) {
                 root = null;
-                size--;
-                return true;
             }
             // one child --> set child as root
-            else if (root.getLeft() == null || root.getRight() == null) {
-
+            else if (root.left == null || root.right == null) {
+                root = root.left == null ? root.left : root.right;
             }
-
-            BSTNode<E> smallest = findParentOfSmallest(root);
-            smallest.setLeft(root.getLeft());
-
+            // two children --> set smallest in the right tree as the new root
+            else {
+                BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
+                // set root's left and right to the left and right of the new root
+                parentOfSmallest.left.left = root.left;
+                parentOfSmallest.left.right = root.right;
+                root = parentOfSmallest.left;
+                // delete the reference to the new root's old position
+                if (parentOfSmallest.left.right != null) {
+                    parentOfSmallest.left = parentOfSmallest.left.right;
+                } else {
+                    parentOfSmallest.left = null;
+                }
+            }
             size--;
             return true;
         }
@@ -140,15 +148,31 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Helper method for remove()
      * 
-     * @param node the current node we are attempting to remove at
-     * @param value the value which we wish to remove
+     * @param node the current node we are attempting to remove at, node != null
+     * @param value the value which we wish to remove, value != null
      * @return true/false if the value was removed or not
      * 
      */
     private boolean remove(BSTNode<E> node, E value) {
         // value is on the left
         if (node.data.compareTo(value) > 0) {
+            if (node.left == null) {
+                return false;
+            } else if (node.left.data.equals(value)) {
+                // no children
+                if (node.left.left == null && node.left.right == null) {
+                    node.left = null;
+                }
+                // one child
+                else if (node.left.left == null || node.left.right == null) {
+                    node.left = node.left.left == null ? node.left.right : node.left.left;
+                }
 
+                size--;
+                return true;
+            }
+
+            return remove(node.left, value);
         }
         // value is on the right (value should never be in this node)
         else {

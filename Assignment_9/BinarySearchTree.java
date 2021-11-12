@@ -10,7 +10,9 @@
  * using: 0
  */
 
+import java.security.cert.TrustAnchor;
 import java.util.List;
+import javax.swing.plaf.basic.BasicTreeUI.TreeCancelEditingAction;
 
 /**
  * Shell for a binary search tree class.
@@ -233,7 +235,31 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return true if value is present in this tree, false otherwise
      */
     public boolean isPresent(E value) {
-        return true;
+        // if empty tree --> false, else --> check
+        return root == null ? false : isPresent(root, value);
+    }
+
+    /**
+     * Helper method for isPresent()
+     * 
+     * @param node the node we are currently at
+     * @param value the value we are looking for
+     * @return true/false if the value is found or not
+     */
+    public boolean isPresent(BSTNode<E> node, E value) {
+        int comparison = node.data.compareTo(value);
+        // if the current node has the value
+        if (comparison == 0) {
+            return true;
+        }
+        // search left subtree if exists
+        else if (comparison > 0) {
+            return node.left == null ? false : isPresent(node.left, value);
+        }
+        // search right subtree if exists
+        else {
+            return node.right == null ? false : isPresent(node.right, value);
+        }
     }
 
     /**
@@ -244,7 +270,21 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the number of items in this Binary Search Tree
      */
     public int size() {
-        return -1;
+        return size(root);
+    }
+
+    /**
+     * Helper method for size()
+     * 
+     * @return the number of elements in this subtree
+     */
+    private int size(BSTNode<E> node) {
+        // base case
+        if (node == null) {
+            return 0;
+        }
+        
+        return 1 + size(node.left) + size(node.right);
     }
 
     /**

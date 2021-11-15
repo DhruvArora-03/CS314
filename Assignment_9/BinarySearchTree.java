@@ -119,26 +119,26 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             root = removeNode(root);
             // // no children --> remove root
             // if (root.left == null && root.right == null) {
-            //     root = null;
+            // root = null;
             // }
             // // one child --> set child as root
             // else if (root.left == null || root.right == null) {
-            //     root = root.left == null ? root.left : root.right;
+            // root = root.left == null ? root.left : root.right;
             // }
             // // two children --> set smallest in the right tree as the new root
             // else {
-                
-            //     BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
-            //     // set root's left and right to the left and right of the new root
-            //     parentOfSmallest.left.left = root.left;
-            //     parentOfSmallest.left.right = root.right;
-            //     root = parentOfSmallest.left;
-            //     // delete the reference to the new root's old position
-            //     if (parentOfSmallest.left.right != null) {
-            //         parentOfSmallest.left = parentOfSmallest.left.right;
-            //     } else {
-            //         parentOfSmallest.left = null;
-            //     }
+
+            // BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
+            // // set root's left and right to the left and right of the new root
+            // parentOfSmallest.left.left = root.left;
+            // parentOfSmallest.left.right = root.right;
+            // root = parentOfSmallest.left;
+            // // delete the reference to the new root's old position
+            // if (parentOfSmallest.left.right != null) {
+            // parentOfSmallest.left = parentOfSmallest.left.right;
+            // } else {
+            // parentOfSmallest.left = null;
+            // }
             // }
             size--;
             return true;
@@ -200,7 +200,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         }
         // two children --> gets replaced by the smallest node in the right tree
         else {
-            BSTNode<E> parentOfSmallest = findParentOfSmallest(node);
+            BSTNode<E> parentOfSmallest = findParentOfSmallest(node.right); //TODO: fix this shit
             // save the node so that reference isn't lost when removing smallest from tree
             BSTNode<E> newNode = new BSTNode<E>(node.left, parentOfSmallest.left.data, node.right);
             // delete the reference to the new node's old position
@@ -217,11 +217,6 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the smallest element in the
      */
     private BSTNode<E> findParentOfSmallest(BSTNode<E> node) {
-        // check null
-        if (node == null || node.left == null) {
-            return node;
-        }
-
         // if the left child doesn't have a child --> we are at parent of smallest
         if (node.left.left == null) {
             return node;
@@ -307,7 +302,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         // find max height in the child subtrees
         int maxChildHeight = Math.max(height(node.left), height(node.right));
         // we only 'include' this node if it has a child
-        return maxChildHeight == 0 ? 0 : 1 + maxChildHeight;
+        return node.left == null && node.right == null ? 0 : 1 + maxChildHeight;
     }
 
     /**
@@ -371,8 +366,21 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the minimum value in this tree
      */
     public E min() {
-        // we can reuse the remove() helper method, handles null vals on its own
-        return findParentOfSmallest(root).left.data;
+        return min(root);
+    }
+
+    /**
+     * Helper method for max()
+     * 
+     * @param node the node we are currently at
+     * @return the maximum value in this subtree
+     */
+    private E min(BSTNode<E> node) {
+        if (node.left != null) {
+            return min(node.left);
+        }
+
+        return node.data;
     }
 
     /**
@@ -430,18 +438,40 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      */
     public E get(int kth) {
         // check preconditions
-        if (kth < 0 || k >= size()) {
-
+        if (kth < 0 || kth >= size) {
+            throw new IllegalArgumentException("kth cannot be out of bounds");
+        }
+        // special cases of min and max
+        else if (kth == 0) {
+            return min();
+        } else if (kth == size) {
+            return max();
         }
 
-        if (kth == 0) {
-            return
-        }
-
+        return get(root, kth);
     }
 
-    private E get(BSTNode<E> node, int kth) {
+    /**
+     * 
+     * 
+     * @param node
+     * @param k
+     * @return
+     */
+    private E get(BSTNode<E> node, Integer k) {
+        E result = null;
+        if (node != null) {
+            result = get(node.left, k);
+            if (k <= 0) {
+                return node.data;
+            } else {
+                k--;
+            }
+            // only call get(node.right) if result is null
+            result = result != null ? result : get(node.right, k);
+        }
 
+        return result;
     }
 
     /**

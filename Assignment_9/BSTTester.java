@@ -100,7 +100,7 @@ public class BSTTester {
         //test 14
         System.out.println("Test 14: height of tree with 2" +
                 "elements must be 1.");
-        showTestResults(t.height() == 1, 14);
+                        showTestResults(t.height() == 1, 14);
 
         //test 15
         System.out.println("Test 15: Removing \"abyss\" from the tree.");

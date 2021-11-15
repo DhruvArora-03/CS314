@@ -213,12 +213,15 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Find the smallest element in the tree rooted at the specified node.
      * 
-     * @param node the node to start the search at
+     * @param node the node to start the search at, node != null and node.left != null
      * @return the smallest element in the
      */
     private BSTNode<E> findParentOfSmallest(BSTNode<E> node) {
+        // check null
+        if (node == null || node.left == null) {
+            return node;
+        }
 
-        //TODO: fuck you (never checked if node.left is null so exception)
         // if the left child doesn't have a child --> we are at parent of smallest
         if (node.left.left == null) {
             return node;
@@ -236,6 +239,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return true if value is present in this tree, false otherwise
      */
     public boolean isPresent(E value) {
+        // check preconditions
+        if (value == null) {
+            throw new IllegalArgumentException("value cannot be null");
+        }
+
         // if empty tree --> false, else --> check
         return root == null ? false : isPresent(root, value);
     }
@@ -247,7 +255,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @param value the value we are looking for
      * @return true/false if the value is found or not
      */
-    public boolean isPresent(BSTNode<E> node, E value) {
+    private boolean isPresent(BSTNode<E> node, E value) {
         int comparison = node.data.compareTo(value);
         // if the current node has the value
         if (comparison == 0) {
@@ -378,7 +386,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the minimum value in this tree
      */
     public E min() {
-        // we can reuse the remove() helper method
+        // we can reuse the remove() helper method, handles null vals on its own
         return findParentOfSmallest(root).left.data;
     }
 
@@ -391,7 +399,39 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return true if data was not present before this call to add, false otherwise.
      */
     public boolean iterativeAdd(E data) {
-        return false;
+        BSTNode<E> prev = null;
+        BSTNode<E> curr = root;
+
+        while (curr != null) {
+            prev = curr;
+
+            int comparison = curr.data.compareTo(data);
+            if (comparison > 0) {
+                // data belongs in left subtree
+                curr = curr.left;
+            } else if (comparison < 0) {
+                // data belongs in right subtree
+                curr = curr.right;
+            } else {
+                // value already exists
+                return false;
+            }
+        }
+
+        curr = new BSTNode<>(data); // curr now represents the node to be added
+        // the tree is empty
+        if (prev == null) {
+            root = curr;
+        }
+        // value belongs on left
+        else if (prev.data.compareTo(data) > 0) {
+            prev.left = curr;
+        }
+        // value belongs on right
+        else {
+            prev.right = curr;
+        }
+        return true;
     }
 
     /**
@@ -403,7 +443,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the kth value in this Binary Search Tree
      */
     public E get(int kth) {
-        return null;
+        
+
+    }
+
+    private E get(BSTNode<E> node, int kth) {
+
     }
 
     /**

@@ -213,7 +213,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Find the smallest element in the tree rooted at the specified node.
      * 
-     * @param node the node to start the search at, node != null and node.left != null
+     * @param node the node to start the search at
      * @return the smallest element in the
      */
     private BSTNode<E> findParentOfSmallest(BSTNode<E> node) {
@@ -279,22 +279,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the number of items in this Binary Search Tree
      */
     public int size() {
-        return size(root);
-    }
-
-    /**
-     * Helper method for size()
-     * 
-     * @param node the node we are at
-     * @return the number of elements in this subtree
-     */
-    private int size(BSTNode<E> node) {
-        // base case
-        if (node == null) {
-            return 0;
-        }
-        
-        return 1 + size(node.left) + size(node.right);
+        return size;
     }
 
     /**
@@ -431,6 +416,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         else {
             prev.right = curr;
         }
+        size++;
         return true;
     }
 
@@ -443,7 +429,14 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the kth value in this Binary Search Tree
      */
     public E get(int kth) {
-        
+        // check preconditions
+        if (kth < 0 || k >= size()) {
+
+        }
+
+        if (kth == 0) {
+            return
+        }
 
     }
 

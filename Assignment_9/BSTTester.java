@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import javax.sound.sampled.SourceDataLine;
 
 /**
  * Some test cases for CS314 Binary Search Tree assignment.
@@ -286,6 +287,9 @@ public class BSTTester {
         Arrays.sort(values);
         for (int i = 0; i < values.length; i++) {
             showTestResults(t2.get(i).equals(Integer.valueOf(values[i])), 40 + i);
+            System.out.println("result: " + t2.get(i) + " expected: " + Integer.valueOf(values[i]));
+            System.out.println(t2.getAll());
+            t2.printTree();
         }
 
         // Test 53: getAllLessThan

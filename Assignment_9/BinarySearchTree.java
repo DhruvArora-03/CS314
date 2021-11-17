@@ -132,7 +132,6 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
                 node.right = removeHelper(node.right, node.data);
             }
         }
-
         return node;
     }
 
@@ -360,7 +359,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             return max();
         }
 
-        return get(root, kth);
+        return get(root, Integer.valueOf(kth));
     }
 
     /**
@@ -368,22 +367,44 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * 
      * @param node
      * @param k
-     * @return
+     * @return 
      */
     private E get(BSTNode<E> node, Integer k) {
-        E result = null;
-        if (node != null) {
-            result = get(node.left, k);
-            if (k <= 0) {
-                return node.data;
-            } else {
-                k--;
-            }
-            // only call get(node.right) if result is null
-            result = result != null ? result : get(node.right, k);
+        Object result = null;
+        
+        result = get(node.left, k);
+        
+        if () {
+
         }
 
         return result;
+
+        // E result = null;
+        // if (node != null) {
+        //     System.out.println("At node of data " + node.data + " and k = " + k + " calling left");
+        //     result = get(node.left, k);
+        //     System.out.println(
+        //             "At node of data " + node.data + " and k = " + k + " result = " + result);
+        //     if (result == null && k <= 0) {
+        //         return node.data;
+        //     } else {
+        //         k = k - 1;
+        //     }
+        //     // only call get(node.right) if result is null
+        //     // result = result != null ? result : get(node.right, k);
+        //     if (result == null) {
+        //         System.out.println(
+        //                 "At node of data " + node.data + " and k = " + k + " calling right");
+        //     }
+        //     result = result != null ? result : get(node.right, k);
+        //     if (result == null) {
+        //         System.out.println(
+        //                 "At node of data " + node.data + " and k = " + k + " result = " + result);
+        //     }
+        // }
+
+        // return result;
     }
 
     /**

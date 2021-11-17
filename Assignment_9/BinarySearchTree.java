@@ -191,6 +191,22 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
+     * Get the size of a subtree at the given node. <br>
+     * 
+     * @param node the root of the subtree
+     * @return the number of items in the subtree
+     */
+    private int size(BSTNode<E> node) {
+        if (node == null) {
+            return 0;
+        } else if (node.equals(root)) {
+            return size();
+        }
+
+        return size(node.left) + size(node.right) + 1;
+    }
+
+    /**
      * return the height of this Binary Search Tree. <br>
      * pre: none<br>
      * post: return the height of this tree. If the tree is empty return -1, otherwise return the
@@ -359,52 +375,29 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             return max();
         }
 
-        return get(root, Integer.valueOf(kth));
+        return get(root, kth);
     }
 
     /**
-     * 
+     * Helper method for get(). Get the kth element in the subtree of node. <br>
      * 
      * @param node
      * @param k
      * @return 
      */
-    private E get(BSTNode<E> node, Integer k) {
-        Object result = null;
-        
-        result = get(node.left, k);
-        
-        if () {
-
+    private E get(BSTNode<E> node, int kth) {
+        if (node == null) {
+            return null;
         }
 
-        return result;
-
-        // E result = null;
-        // if (node != null) {
-        //     System.out.println("At node of data " + node.data + " and k = " + k + " calling left");
-        //     result = get(node.left, k);
-        //     System.out.println(
-        //             "At node of data " + node.data + " and k = " + k + " result = " + result);
-        //     if (result == null && k <= 0) {
-        //         return node.data;
-        //     } else {
-        //         k = k - 1;
-        //     }
-        //     // only call get(node.right) if result is null
-        //     // result = result != null ? result : get(node.right, k);
-        //     if (result == null) {
-        //         System.out.println(
-        //                 "At node of data " + node.data + " and k = " + k + " calling right");
-        //     }
-        //     result = result != null ? result : get(node.right, k);
-        //     if (result == null) {
-        //         System.out.println(
-        //                 "At node of data " + node.data + " and k = " + k + " result = " + result);
-        //     }
-        // }
-
-        // return result;
+        int leftSize = size(node.left);
+        if (leftSize == kth) {
+            return node.data;
+        } else if (leftSize > kth) {
+            return get(node.left, kth);
+        } else {
+            return get(node.right, kth - leftSize - 1);
+        }    
     }
 
     /**
@@ -417,7 +410,26 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         list are in ascending order.
      */
     public List<E> getAllLessThan(E value) {
-        return null;
+        List<E> result = new ArrayList<>();
+        getAllLessThan(result, root, value);
+        return result;
+    }
+
+    /**
+     * Helper method for getAllLessThan()
+     * 
+     * @param result list to store results
+     * @param node the subtree we are currently at
+     * @param value the value we want less than
+     */
+    private void getAllLessThan(List<E> result, BSTNode<E> node, E value) {
+        if (node != null) {
+            getAllLessThan(result, node.left, value);
+            if (node.data.compareTo(value) < 0) {
+                result.add(node.data);
+                getAllLessThan(result, node.right, value);
+            }
+        }
     }
 
     /**
@@ -430,7 +442,19 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         elements of the list are in ascending order.
      */
     public List<E> getAllGreaterThan(E value) {
-        return null;
+        List<E> result = new ArrayList<>();
+        getAllGreaterThan(result, root, value);
+        return result;
+    }
+
+    private void getAllGreaterThan(List<E> result, BSTNode<E> node, E value) {
+        if (node != null) {
+            if (node.data.compareTo(value) > 0) {
+                getAllGreaterThan(result, node.left, value);
+                result.add(node.data);
+            }
+            getAllGreaterThan(result, node.right, value);
+        }
     }
 
     /**

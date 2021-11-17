@@ -287,16 +287,13 @@ public class BSTTester {
         Arrays.sort(values);
         for (int i = 0; i < values.length; i++) {
             showTestResults(t2.get(i).equals(Integer.valueOf(values[i])), 40 + i);
-            System.out.println("result: " + t2.get(i) + " expected: " + Integer.valueOf(values[i]));
-            System.out.println(t2.getAll());
-            t2.printTree();
         }
 
         // Test 53: getAllLessThan
         System.out.println("get all less than -50");
         showTestResults(t2.getAllLessThan(-50).equals(new ArrayList<Integer>()), 53);
-        //System.out.println(t2.getAll());
-        //t2.printTree();
+        // System.out.println(t2.getAll());
+        // t2.printTree();
 
 
         // Test 54: getAllLessThan
@@ -310,8 +307,8 @@ public class BSTTester {
         }
         List<Integer> actual = t2.getAllLessThan(cutoff);
         showTestResults(actual.equals(expectedList), 54);
-        //System.out.println(t2.getAll());
-        //t2.printTree();
+        // System.out.println(t2.getAll());
+        // t2.printTree();
 
         // Test 55: getAllLessThan
         System.out.println("get all less than 1000");

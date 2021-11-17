@@ -49,50 +49,34 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         if (value == null) {
             throw new IllegalArgumentException("item cannot be null");
         }
-        // tree empty --> create root
-        else if (root == null) {
-            root = new BSTNode<E>(value);
-            size++;
-            return true;
-        }
-
-        // else --> recurse
-        return add(root, value);
+        
+        int oldSize = size;
+        root = addHelper(root, value);
+        return size > oldSize; // if size increase --> something was added
     }
 
     /**
-     * Helper method for add()
+     * Helper method for add(). Go until 'fall off' tree or we find the val already exists
      * 
      * @param node the current node we are attempting to add at
      * @param value the value which we wish to add
-     * @return true/false if the value was added or not
+     * @return the node after the add is complete
      * 
      */
-    private boolean add(BSTNode<E> node, E value) {
-        // ensure no duplicates
-        if (node.getData().compareTo(value) == 0) {
-            return false;
+    private BSTNode<E> addHelper(BSTNode<E> node, E value) {
+        if (node == null) {
+            size++;
+            return new BSTNode<>(value);
         }
-        // add to left if possible, otherwise go into left subtree
-        else if (node.getData().compareTo(value) > 0) {
-            if (node.getLeft() == null) {
-                node.setLeft(new BSTNode<E>(value));
-                size++;
-                return true;
-            } else {
-                return add(node.getLeft(), value);
-            }
+        int comparison = value.compareTo(node.data);
+        if (comparison < 0) { // value is less --> go left
+            node.left = addHelper(node.left, value);
+        } else if (comparison > 0) { // value is greater --> go right
+            node.right = addHelper(node.right, value);
         }
-        // add to right if possible, otherwise go into right subtree
-        else {
-            if (node.getRight() == null) {
-                node.setRight(new BSTNode<E>(value));
-                size++;
-                return true;
-            } else {
-                return add(node.getRight(), value);
-            }
-        }
+        // else value is already in the tree
+
+        return node;
     }
 
     /**

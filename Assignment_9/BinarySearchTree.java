@@ -270,7 +270,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the height of this tree or -1 if the tree is empty
      */
     public int height() {
-        return root == null ? -1 : height(root);
+        return height(root);
     }
 
     /**
@@ -281,12 +281,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      */
     private int height(BSTNode<E> node) {
         if (node == null) {
-            return 0;
+            return -1;
         }
-        // find max height in the child subtrees
-        int maxChildHeight = Math.max(height(node.left), height(node.right));
-        // we only 'include' this node if it has a child
-        return node.left == null && node.right == null ? 0 : 1 + maxChildHeight;
+        // find max height of the two child subtrees
+        return 1 + Math.max(height(node.left), height(node.right));
     }
 
     /**

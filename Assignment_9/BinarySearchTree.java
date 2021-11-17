@@ -49,7 +49,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         if (value == null) {
             throw new IllegalArgumentException("item cannot be null");
         }
-        
+
         int oldSize = size;
         root = addHelper(root, value);
         return size > oldSize; // if size increase --> something was added

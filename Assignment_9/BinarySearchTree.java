@@ -356,7 +356,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         // special cases of min and max
         else if (kth == 0) {
             return min();
-        } else if (kth == size) {
+        } else if (kth == size - 1) {
             return max();
         }
 
@@ -420,7 +420,17 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return The number of nodes in this tree at a depth equal to the parameter d.
      */
     public int numNodesAtDepth(int d) {
-        return -1;
+        return numNodesAtDepth(root, d);
+    }
+
+    private int numNodesAtDepth(BSTNode<E> node, int d) {
+        if (node == null) { // fell off tree before reaching depth d
+            return 0;
+        } else if (d == 0) { // found depth d --> + 1
+            return 1;
+        } else { // search deeper
+            return numNodesAtDepth(node.left, d - 1) + numNodesAtDepth(node.right, d - 1);
+        }
     }
 
     /**

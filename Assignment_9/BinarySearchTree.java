@@ -94,120 +94,167 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         if (value == null) {
             throw new IllegalArgumentException("item cannot be null");
         }
-        // tree empty --> nothing to remove
-        else if (root == null) {
-            return false;
-        }
-        // the value to remove is at root
-        else if (root.data.equals(value)) {
-            root = removeNode(root);
-            // // no children --> remove root
-            // if (root.left == null && root.right == null) {
-            // root = null;
-            // }
-            // // one child --> set child as root
-            // else if (root.left == null || root.right == null) {
-            // root = root.left == null ? root.left : root.right;
-            // }
-            // // two children --> set smallest in the right tree as the new root
-            // else {
 
-            // BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
-            // // set root's left and right to the left and right of the new root
-            // parentOfSmallest.left.left = root.left;
-            // parentOfSmallest.left.right = root.right;
-            // root = parentOfSmallest.left;
-            // // delete the reference to the new root's old position
-            // if (parentOfSmallest.left.right != null) {
-            // parentOfSmallest.left = parentOfSmallest.left.right;
-            // } else {
-            // parentOfSmallest.left = null;
-            // }
-            // }
-            size--;
-            return true;
-        }
-
-        // else --> recurse
-        return remove(root, value);
+        int oldSize = size;
+        root = removeHelper(root, value);
+        return size < oldSize; // if size decrease --> something was removed
     }
 
     /**
-     * Helper method for remove()
+     * Helper method for remove(). Go until 'fall off' tree or we find the val to remove
      * 
-     * @param node the current node we are attempting to remove at, node != null
-     * @param value the value which we wish to remove, value != null
-     * @return true/false if the value was removed or not
+     * @param node the current node we are attempting to remove at
+     * @param value the value which we wish to remove
+     * @return the node after the remove is complete
      * 
      */
-    private boolean remove(BSTNode<E> node, E value) {
-        // value is on the left
-        if (node.data.compareTo(value) > 0) {
-            if (node.left == null) {
-                return false;
-            } else if (node.left.data.equals(value)) {
-                node.left = removeNode(node.left);
-                size--;
-                return true;
-            }
-
-            return remove(node.left, value);
-        }
-        // value is on the right (value should never be in this node)
-        else {
-            if (node.right == null) {
-                return false;
-            } else if (node.right.data.equals(value)) {
-                node.right = removeNode(node.right);
-                size--;
-                return true;
-            }
-
-            return remove(node.right, value);
-        }
-    }
-
-    /**
-     * Removes the given node and returns the node that should 'replace' it
-     * 
-     * @param node the BSTNode<E> to be removed
-     * @return the new node that should replace the removed one
-     */
-    private BSTNode<E> removeNode(BSTNode<E> node) {
-        // no children --> no need to replace
-        if (node.left == null && node.right == null) {
+    private BSTNode<E> removeHelper(BSTNode<E> node, E value) {
+        // base case
+        if (node == null) {
             return null;
         }
-        // one child --> gets replaced by child
-        else if (node.left == null || node.right == null) {
-            return node.left == null ? node.right : node.left;
-        }
-        // two children --> gets replaced by the smallest node in the right tree
-        else {
-            BSTNode<E> parentOfSmallest = findParentOfSmallest(node.right); //TODO: fix this shit
-            // save the node so that reference isn't lost when removing smallest from tree
-            BSTNode<E> newNode = new BSTNode<E>(node.left, parentOfSmallest.left.data, node.right);
-            // delete the reference to the new node's old position
-            parentOfSmallest.left = removeNode(parentOfSmallest.left);
 
-            return newNode;
+        int comparison = value.compareTo(node.data);
+        if (comparison < 0) { // value is less --> go left
+            node.left = removeHelper(node.left, value);
+        } else if (comparison > 0) { // value is greater --> go right
+            node.right = removeHelper(node.right, value);
+        } else { // value is equal to node.data --> remove it
+            if (node.left == null) { // only right child
+                size--;
+                return node.right;
+            } else if (node.right == null) { // only left child
+                size--;
+                return node.left;
+            } else { // two children --> replace with smallest value in right subtree
+                node.data = min(node.right);
+                // now go remove the duplicate
+                node.right = removeHelper(node.right, node.data);
+            }
         }
+
+        return node;
     }
 
-    /**
-     * Find the smallest element in the tree rooted at the specified node.
-     * 
-     * @param node the node to start the search at
-     * @return the smallest element in the
-     */
-    private BSTNode<E> findParentOfSmallest(BSTNode<E> node) {
-        // if the left child doesn't have a child --> we are at parent of smallest
-        if (node.left.left == null) {
-            return node;
-        }
+    // public boolean remove(E value) {
+    //     // check preconditions
+    //     if (value == null) {
+    //         throw new IllegalArgumentException("item cannot be null");
+    //     }
+    //     // tree empty --> nothing to remove
+    //     else if (root == null) {
+    //         return false;
+    //     }
+    //     // the value to remove is at root
+    //     else if (root.data.equals(value)) {
+    //         root = removeNode(root);
+    //         // // no children --> remove root
+    //         // if (root.left == null && root.right == null) {
+    //         // root = null;
+    //         // }
+    //         // // one child --> set child as root
+    //         // else if (root.left == null || root.right == null) {
+    //         // root = root.left == null ? root.left : root.right;
+    //         // }
+    //         // // two children --> set smallest in the right tree as the new root
+    //         // else {
 
-        return findParentOfSmallest(node.left);
-    }
+    //         // BSTNode<E> parentOfSmallest = findParentOfSmallest(root.right);
+    //         // // set root's left and right to the left and right of the new root
+    //         // parentOfSmallest.left.left = root.left;
+    //         // parentOfSmallest.left.right = root.right;
+    //         // root = parentOfSmallest.left;
+    //         // // delete the reference to the new root's old position
+    //         // if (parentOfSmallest.left.right != null) {
+    //         // parentOfSmallest.left = parentOfSmallest.left.right;
+    //         // } else {
+    //         // parentOfSmallest.left = null;
+    //         // }
+    //         // }
+    //         size--;
+    //         return true;
+    //     }
+
+    //     // else --> recurse
+    //     return remove(root, value);
+    // }
+
+    // /**
+    //  * Helper method for remove()
+    //  * 
+    //  * @param node the current node we are attempting to remove at, node != null
+    //  * @param value the value which we wish to remove, value != null
+    //  * @return true/false if the value was removed or not
+    //  * 
+    //  */
+    // private boolean remove(BSTNode<E> node, E value) {
+    //     // value is on the left
+    //     if (node.data.compareTo(value) > 0) {
+    //         if (node.left == null) {
+    //             return false;
+    //         } else if (node.left.data.equals(value)) {
+    //             node.left = removeNode(node.left);
+    //             size--;
+    //             return true;
+    //         }
+
+    //         return remove(node.left, value);
+    //     }
+    //     // value is on the right (value should never be in this node)
+    //     else {
+    //         if (node.right == null) {
+    //             return false;
+    //         } else if (node.right.data.equals(value)) {
+    //             node.right = removeNode(node.right);
+    //             size--;
+    //             return true;
+    //         }
+
+    //         return remove(node.right, value);
+    //     }
+    // }
+
+    // /**
+    //  * Removes the given node and returns the node that should 'replace' it
+    //  * 
+    //  * @param node the BSTNode<E> to be removed
+    //  * @return the new node that should replace the removed one
+    //  */
+    // private BSTNode<E> removeNode(BSTNode<E> node) {
+    //     // no children --> no need to replace
+    //     if (node.left == null && node.right == null) {
+    //         return null;
+    //     }
+    //     // one child --> gets replaced by child
+    //     else if (node.left == null || node.right == null) {
+    //         return node.left == null ? node.right : node.left;
+    //     }
+    //     // two children --> gets replaced by the smallest node in the right tree
+    //     else {
+    //         BSTNode<E> parentOfSmallest = findParentOfSmallest(node.right); //TODO: fix this shit
+    //         // save the node so that reference isn't lost when removing smallest from tree
+    //         BSTNode<E> newNode = new BSTNode<E>(node.left, parentOfSmallest.left.data, node.right);
+    //         // delete the reference to the new node's old position
+    //         parentOfSmallest.left = removeNode(parentOfSmallest.left);
+
+    //         return newNode;
+    //     }
+    // }
+
+    // /**
+    //  * Find the smallest element in the tree rooted at the specified node.
+    //  * 
+    //  * @param node the node to start the search at
+    //  * @return the smallest element in the
+    //  */
+    // private BSTNode<E> findParentOfSmallest(BSTNode<E> node) {
+    //     // if the left child doesn't have a child --> we are at parent of smallest
+    //     if (node.left.left == null) {
+    //         return node;
+    //     }
+
+    //     return findParentOfSmallest(node.left);
+    // }
 
     /**
      * Check to see if the specified element is in this Binary Search Tree. <br>

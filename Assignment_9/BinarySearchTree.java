@@ -1,4 +1,4 @@
-/*
+/**
  * CS 314 STUDENTS: FILL IN THIS HEADER.
  *
  * Student information for assignment:
@@ -6,8 +6,10 @@
  * On my honor, Dhruv Arora, this programming assignment is my own work and I have not provided this
  * code to any other student.
  *
- * UTEID: da32895 email address: dhruvarora@utexas.edu TA name: Grace Number of slip days I am
- * using: 0
+ * UTEID: da32895 <br>
+ * email address: dhruvarora@utexas.edu <br>
+ * TA name: Grace <br>
+ * Number of slip days I am using: 0 <br>
  */
 
 import java.util.ArrayList;
@@ -383,7 +385,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * 
      * @param node
      * @param k
-     * @return 
+     * @return
      */
     private E get(BSTNode<E> node, int kth) {
         if (node == null) {
@@ -397,7 +399,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             return get(node.left, kth);
         } else {
             return get(node.right, kth - leftSize - 1);
-        }    
+        }
     }
 
     /**

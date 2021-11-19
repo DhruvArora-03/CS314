@@ -1,0 +1,295 @@
+Test Number 1 testing  size on empty LetterInventory
+Expected result: 0
+Actual result: 0
+Passed test 1
+
+Test Number 2 testing  toString on empty LetterInventory
+Expected result: 
+Actual result: 
+Passed test 2
+
+Test Number 3 testing  get on empty LetterInventory
+Expected result: 0
+Actual result: 0
+Passed test 3
+
+Test Number 4 testing  get on empty LetterInventory
+Expected result: 0
+Actual result: 0
+Passed test 4
+
+Test Number 5 testing  isEmpty on empty LetterInventory
+Expected result: true
+Actual result: true
+Passed test 5
+
+Test Number 6 testing  LetterInventory toString on empty LetterInventory
+Expected result: 
+Actual result: 
+Passed test 6
+
+Test Number 7 testing  LetterInventory toString
+Expected result: mmmmm
+Actual result: mmmmm
+Passed test 7
+
+Test Number 8 testing  LetterInventory constructor and toString
+Expected result: adefgiijnnorrrssttuvy
+Actual result: adefgiijnnorrrssttuvy
+Passed test 8
+
+Test Number 9 testing  LetterInventory size
+Expected result: 21
+Actual result: 21
+Passed test 9
+
+Test Number 10 testing  LetterInventory isEmpty
+Expected result: false
+Actual result: false
+Passed test 10
+
+Test Number 11 testing LetterInventory subtract
+Expected result: null
+Actual result: null
+Passed test 11
+
+Test Number 12 testing LetterInventory subtract
+Expected result: efgiijrrrsuvy
+Actual result: efgiijrrrsuvy
+Passed test 12
+
+Test Number 13 testing LetterInventory size after subtract
+Expected result: 13
+Actual result: 13
+Passed test 13
+
+Test Number 14 testing LetterInventory isEmpty after subtract
+Expected result: false
+Actual result: false
+Passed test 14
+
+Test Number 15 testing LetterInventory subtract
+Expected result: null
+Actual result: null
+Passed test 15
+
+Test Number 16 testing LetterInventory equals
+Expected result: false
+Actual result: false
+Passed test 16
+
+Test Number 17 testing LetterInventory add
+Expected result: aadefgiiijlnnoorrrssttuvvy
+Actual result: aadefgiiijlnnoorrrssttuvvy
+Passed test 17
+
+Test Number 18 testing LetterInventory size after add
+Expected result: 26
+Actual result: 26
+Passed test 18
+
+Test Number 19 testing LetterInventory isEmpty after add
+Expected result: false
+Actual result: false
+Passed test 19
+
+Test Number 20 testing LetterInventory add and equals
+Expected result: aadefgiiijlnnoorrrssttuvvy
+Actual result: aadefgiiijlnnoorrrssttuvvy
+Passed test 20
+
+Test Number 21 testing LetterInventory equals
+Expected result: false
+Actual result: false
+Passed test 21
+
+Test Number 22 testing LetterInventory equals
+Expected result: false
+Actual result: false
+Passed test 22
+
+Test Number 23 testing LetterInventory equals
+Expected result: true
+Actual result: true
+Passed test 23
+
+Enter y or Y to display anagrams during tests: n
+25
+
+Test number: 0
+Phrase: dog
+Word limit: 0
+Expected Number of Anagrams: 2
+Passed Test
+Time to find anagrams: 0.011286116
+
+Test number: 1
+Phrase: dog!!! dog@@
+Word limit: 0
+Expected Number of Anagrams: 4
+Passed Test
+Time to find anagrams: 0.008025077
+
+Test number: 2
+Phrase: DOG CAT dog2
+Word limit: 0
+Expected Number of Anagrams: 27
+Passed Test
+Time to find anagrams: 0.008734368
+
+Test number: 3
+Phrase: olivia
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.006859303
+
+Test number: 4
+Phrase: olivia
+Word limit: 2
+Expected Number of Anagrams: 1
+Passed Test
+Time to find anagrams: 0.004140059
+
+Test number: 5
+Phrase: olivia
+Word limit: 3
+Expected Number of Anagrams: 1
+Passed Test
+Time to find anagrams: 0.008545432
+
+Test number: 6
+Phrase: isabelle
+Word limit: 0
+Expected Number of Anagrams: 12
+Passed Test
+Time to find anagrams: 0.002686639
+
+Test number: 7
+Phrase: isabelle scott
+Word limit: 2
+Expected Number of Anagrams: 7
+Passed Test
+Time to find anagrams: 0.008539625
+
+Test number: 8
+Phrase: isabelle m. scott
+Word limit: 2
+Expected Number of Anagrams: 2
+Passed Test
+Time to find anagrams: 0.013665009
+
+Test number: 9
+Phrase: isabelle m scott
+Word limit: 3
+Expected Number of Anagrams: 868
+Passed Test
+Time to find anagrams: 0.265115191
+
+Test number: 10
+Phrase: submarine
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.002243556
+
+Test number: 11
+Phrase: submarine
+Word limit: 2
+Expected Number of Anagrams: 22
+Passed Test
+Time to find anagrams: 0.002997065
+
+Test number: 12
+Phrase: submarine
+Word limit: 0
+Expected Number of Anagrams: 76
+Passed Test
+Time to find anagrams: 0.003680896
+
+Test number: 13
+Phrase: texas longhorns
+Word limit: 0
+Expected Number of Anagrams: 217
+Passed Test
+Time to find anagrams: 0.144108802
+
+Test number: 14
+Phrase: hook em horns!
+Word limit: 0
+Expected Number of Anagrams: 17
+Passed Test
+Time to find anagrams: 0.002507976
+
+Test number: 15
+Phrase: kelly j. scott
+Word limit: 0
+Expected Number of Anagrams: 1
+Passed Test
+Time to find anagrams: 0.002592394
+
+Test number: 16
+Phrase: quick brown fox
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.00190097
+
+Test number: 17
+Phrase: quick brown fox
+Word limit: 2
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.003499554
+
+Test number: 18
+Phrase: quick brown fox
+Word limit: 3
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.005723903
+
+Test number: 19
+Phrase: quick brown fox
+Word limit: 4
+Expected Number of Anagrams: 24
+Passed Test
+Time to find anagrams: 0.008587864
+
+Test number: 20
+Phrase: computer science student
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.004044475
+
+Test number: 21
+Phrase: computer science student
+Word limit: 2
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.148804055
+
+Test number: 22
+Phrase: computer science student
+Word limit: 3
+Expected Number of Anagrams: 52
+Passed Test
+Time to find anagrams: 7.186357146
+
+Test number: 23
+Phrase: big purple narwarhl
+Word limit: 0
+Expected Number of Anagrams: 17508
+Passed Test
+Time to find anagrams: 3.912347238
+
+Test number: 24
+Phrase: st. Louis
+Word limit: 2
+Expected Number of Anagrams: 4
+Passed Test
+Time to find anagrams: 0.001717841
+
+AnagramSolver test cases run: 25
+AnagramSolver test cases failed: 0

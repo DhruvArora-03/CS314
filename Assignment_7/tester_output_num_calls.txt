@@ -1,0 +1,202 @@
+Test number: 0
+Phrase: dog
+Word limit: 0
+Expected Number of Anagrams: 2
+Passed Test
+Time to find anagrams: 0.008338678
+Number of calls to recursive helper method: 3
+
+Test number: 1
+Phrase: dog!!! dog@@
+Word limit: 0
+Expected Number of Anagrams: 4
+Passed Test
+Time to find anagrams: 0.007589368
+Number of calls to recursive helper method: 12
+
+Test number: 2
+Phrase: DOG CAT dog2
+Word limit: 0
+Expected Number of Anagrams: 27
+Passed Test
+Time to find anagrams: 0.008821764
+Number of calls to recursive helper method: 216
+
+Test number: 3
+Phrase: olivia
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.007128851
+Number of calls to recursive helper method: 9
+
+Test number: 4
+Phrase: olivia
+Word limit: 2
+Expected Number of Anagrams: 1
+Passed Test
+Time to find anagrams: 0.006931033
+Number of calls to recursive helper method: 10
+
+Test number: 5
+Phrase: olivia
+Word limit: 3
+Expected Number of Anagrams: 1
+Passed Test
+Time to find anagrams: 0.00966769
+Number of calls to recursive helper method: 10
+
+Test number: 6
+Phrase: isabelle
+Word limit: 0
+Expected Number of Anagrams: 12
+Passed Test
+Time to find anagrams: 0.003749725
+Number of calls to recursive helper method: 141
+
+Test number: 7
+Phrase: isabelle scott
+Word limit: 2
+Expected Number of Anagrams: 7
+Passed Test
+Time to find anagrams: 0.010599303
+Number of calls to recursive helper method: 10,711
+
+Test number: 8
+Phrase: isabelle m. scott
+Word limit: 2
+Expected Number of Anagrams: 2
+Passed Test
+Time to find anagrams: 0.017708055
+Number of calls to recursive helper method: 22,763
+
+Test number: 9
+Phrase: isabelle m scott
+Word limit: 3
+Expected Number of Anagrams: 868
+Passed Test
+Time to find anagrams: 0.165332777
+Number of calls to recursive helper method: 134,289
+
+Test number: 10
+Phrase: submarine
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.002693286
+Number of calls to recursive helper method: 144
+
+Test number: 11
+Phrase: submarine
+Word limit: 2
+Expected Number of Anagrams: 22
+Passed Test
+Time to find anagrams: 0.003530045
+Number of calls to recursive helper method: 802
+
+Test number: 12
+Phrase: submarine
+Word limit: 0
+Expected Number of Anagrams: 76
+Passed Test
+Time to find anagrams: 0.00337701
+Number of calls to recursive helper method: 856
+
+Test number: 13
+Phrase: texas longhorns
+Word limit: 0
+Expected Number of Anagrams: 217
+Passed Test
+Time to find anagrams: 0.073755413
+Number of calls to recursive helper method: 39,510
+
+Test number: 14
+Phrase: hook em horns!
+Word limit: 0
+Expected Number of Anagrams: 17
+Passed Test
+Time to find anagrams: 0.001764847
+Number of calls to recursive helper method: 506
+
+Test number: 15
+Phrase: kelly j. scott
+Word limit: 0
+Expected Number of Anagrams: 1
+Passed Test
+Time to find anagrams: 0.002280724
+Number of calls to recursive helper method: 442
+
+Test number: 16
+Phrase: quick brown fox
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.002196097
+Number of calls to recursive helper method: 106
+
+Test number: 17
+Phrase: quick brown fox
+Word limit: 2
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.00178142
+Number of calls to recursive helper method: 1,304
+
+Test number: 18
+Phrase: quick brown fox
+Word limit: 3
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.00430157
+Number of calls to recursive helper method: 3,101
+
+Test number: 19
+Phrase: quick brown fox
+Word limit: 4
+Expected Number of Anagrams: 24
+Passed Test
+Time to find anagrams: 0.00631078
+Number of calls to recursive helper method: 3,369
+
+Test number: 20
+Phrase: computer science student
+Word limit: 1
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.002997594
+Number of calls to recursive helper method: 1,225
+
+Test number: 21
+Phrase: computer science student
+Word limit: 2
+Expected Number of Anagrams: 0
+Passed Test
+Time to find anagrams: 0.091150697
+Number of calls to recursive helper method: 213,540
+
+Test number: 22
+Phrase: computer science student
+Word limit: 3
+Expected Number of Anagrams: 52
+Passed Test
+Time to find anagrams: 3.357346292
+Number of calls to recursive helper method: 8,722,154
+
+Test number: 23
+Phrase: big purple narwarhl
+Word limit: 0
+Expected Number of Anagrams: 17508
+Passed Test
+Time to find anagrams: 1.628906243
+Number of calls to recursive helper method: 1,436,644
+
+Test number: 24
+Phrase: st. Louis
+Word limit: 2
+Expected Number of Anagrams: 4
+Passed Test
+Time to find anagrams: 0.001626268
+Number of calls to recursive helper method: 36
+
+AnagramSolver test cases run: 25
+AnagramSolver test cases failed: 0

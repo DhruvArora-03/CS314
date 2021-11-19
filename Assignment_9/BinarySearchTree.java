@@ -328,11 +328,9 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             prev = curr;
 
             int comparison = curr.data.compareTo(data);
-            if (comparison > 0) {
-                // data belongs in left subtree
+            if (comparison > 0) { // data belongs in left subtree
                 curr = curr.left;
-            } else if (comparison < 0) {
-                // data belongs in right subtree
+            } else if (comparison < 0) { // data belongs in right subtree
                 curr = curr.right;
             } else {
                 // value already exists
@@ -341,16 +339,13 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         }
 
         curr = new BSTNode<>(data); // curr now represents the node to be added
-        // the tree is empty
-        if (prev == null) {
+        if (prev == null) { // tree empty --> init root
             root = curr;
         }
-        // value belongs on left
-        else if (prev.data.compareTo(data) > 0) {
+        else if (prev.data.compareTo(data) > 0) { // value belongs on left
             prev.left = curr;
         }
-        // value belongs on right
-        else {
+        else { // value belongs on right
             prev.right = curr;
         }
         size++;
@@ -370,36 +365,38 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         if (kth < 0 || kth >= size) {
             throw new IllegalArgumentException("kth cannot be out of bounds");
         }
-        // special cases of min and max
-        else if (kth == 0) {
-            return min();
-        } else if (kth == size - 1) {
-            return max();
-        }
 
-        return get(root, kth);
+        int[] k = { kth }; // so that we can pass by reference
+        return get(root, k);
     }
 
     /**
      * Helper method for get(). Get the kth element in the subtree of node. <br>
      * 
-     * @param node
-     * @param k
-     * @return
+     * @param node the root of the subtree we are currently at
+     * @param k singleton array containing the value of k (used to pass by reference)
+     * @return the kth element in the subtree of node
      */
-    private E get(BSTNode<E> node, int kth) {
+    private E get(BSTNode<E> node, int[] k) {
         if (node == null) {
             return null;
         }
 
-        int leftSize = size(node.left);
-        if (leftSize == kth) {
-            return node.data;
-        } else if (leftSize > kth) {
-            return get(node.left, kth);
+        // check left subtree
+        E result = get(node.left, k);
+        
+        // if not found in left subtree, check this node and decrement k
+        if (result == null && k[0] <= 0) {
+            // k == 0 --> we are at the kth element
+            result = node.data;
         } else {
-            return get(node.right, kth - leftSize - 1);
+            k[0]--;
         }
+
+        // check right subtree if we have not found kth in left subtree or current node
+        result = result == null ? get(node.right, k) : result;
+
+        return result;
     }
 
     /**
@@ -426,8 +423,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      */
     private void getAllLessThan(List<E> result, BSTNode<E> node, E value) {
         if (node != null) {
+            // check left subtree always
             getAllLessThan(result, node.left, value);
+            
             if (node.data.compareTo(value) < 0) {
+                // if this node's data < value --> add it to list and check right subtree
                 result.add(node.data);
                 getAllLessThan(result, node.right, value);
             }

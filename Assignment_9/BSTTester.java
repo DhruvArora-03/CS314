@@ -1,4 +1,4 @@
-/*
+/**
  * CS 314 STUDENTS: FILL IN THIS HEADER.
  *
  * Student information for assignment:
@@ -23,16 +23,92 @@ import java.util.TreeSet;
 /**
  * Some test cases for CS314 Binary Search Tree assignment.
  * 
- * Experiment results:
+ * Random insertion experiment results: <br>
+ * ====================BINARY SEARCH TREE==================== <br>
+ * | N_______| Average Time | Average Height | Average Size | <br>
+ * | 1000____| 0.0001389456 | 19.0___________| 1000.0_______| <br>
+ * | 2000____| 0.0002468786 | 22.0___________| 2000.0_______| <br>
+ * | 4000____| 0.0005366562 | 25.0___________| 4000.0_______| <br>
+ * | 8000____| 0.0010696989 | 27.0___________| 8000.0_______| <br>
+ * | 16000___| 0.0023706173 | 31.0___________| 16000.0______| <br>
+ * | 32000___| 0.0071199302 | 32.0___________| 32000.0______| <br>
+ * | 64000___| 0.0140719343 | 35.0___________| 63999.0______| <br>
+ * | 128000__| 0.0318959602 | 37.0___________| 127998.0_____| <br>
+ * | 256000__| 0.0775779063 | 40.0___________| 255991.0_____| <br>
+ * | 512000__| 0.2274391155 | 42.0___________| 511971.0_____| <br>
+ * | 1024000 | 0.6503940896 | 46.0___________| 1023895.0____| <br>
+ * ==============JAVA TREE SET============== <br>
+ * | N_______| Average Time | Average Size | <br>
+ * | 1000____| 0.0004866296 | 1000.0_______| <br>
+ * | 2000____| 0.0005763055 | 2000.0_______| <br>
+ * | 4000____| 0.0011156639 | 4000.0_______| <br>
+ * | 8000____| 0.0022220080 | 8000.0_______| <br>
+ * | 16000___| 0.0029696141 | 16000.0______| <br>
+ * | 32000___| 0.0066700788 | 32000.0______| <br>
+ * | 64000___| 0.0137773670 | 63999.0______| <br>
+ * | 128000__| 0.0301365168 | 127998.0_____| <br>
+ * | 256000__| 0.0807418826 | 255991.0_____| <br>
+ * | 512000__| 0.2564813060 | 511971.0_____| <br>
+ * | 1024000 | 0.6577213583 | 1023895.0____| <br>
+ * 
+ * Ascending order experiment results: <br>
+ * ====================BINARY SEARCH TREE==================== <br>
+ * | N_______| Average Time | Average Height | Average Size | <br>
+ * | 1000____| 0.0025287633 | 999____________| 1000_________| <br>
+ * | 2000____| 0.0041302911 | 1999___________| 2000_________| <br>
+ * | 4000____| 0.0162255981 | 3999___________| 4000_________| <br>
+ * | 8000____| 0.0663554451 | 7999___________| 8000_________| <br>
+ * | 16000___| 0.2719840570 | 15999__________| 16000________| <br>
+ * | 32000___| 1.1076665933 | 31999__________| 32000________| <br>
+ * | 64000___| 4.4457104172 | 63999__________| 64000________| <br>
+ * ==============JAVA TREE SET============== <br>
+ * | N_______| Average Time | Average Size | <br>
+ * | 1000____| 0.0006473262 | 1000_________| <br>
+ * | 2000____| 0.0006578692 | 2000_________| <br>
+ * | 4000____| 0.0009860021 | 4000_________| <br>
+ * | 8000____| 0.0009748396 | 8000_________| <br>
+ * | 16000___| 0.0017055246 | 16000________| <br>
+ * | 32000___| 0.0036437656 | 32000________| <br>
+ * | 64000___| 0.0064692245 | 64000________| <br>
  * 
  * Questions: <br>
- * For each value of N what is the minimum possible tree height, assuming N
- * unique values are inserted into the tree? <br>
+ * For each value of N what is the minimum possible tree height, assuming N unique values are
+ * inserted into the tree? <br>
  * 
- * The minimum possible height is given by floor(log base 2 of N).
- * So for N = 1000, minHeight = 109
+ * The minimum possible height is given by floor(log base 2 of N). <br>
+ * So for N = 1000, minHeight = 11. <br>
+ * for N = 2000, minHeight = 12. <br>
+ * for N = 4000, minHeight = 13. <br>
+ * for N = 8000, minHeight = 14. <br>
+ * for N = 16000, minHeight = 15. <br>
+ * for N = 32000, minHeight = 16. <br>
+ * for N = 64000, minHeight = 17. <br>
+ * for N = 128000, minHeight = 18. <br>
+ * for N = 256000, minHeight = 19. <br>
+ * for N = 512000, minHeight = 20. <br>
+ * for N = 1024000, minHeight = 21. <br>
  * 
+ * What are the average times for TreeSet? How do they compare to your BinarySearchTree? <br>
  * 
+ * (Average times are in the table). The average time for TreeSet is less than half the time for the
+ * BinarySearchTree when N <= 8000, however, at all other times the average time for TreeSet is the
+ * same as the BinarySearchTree. <br>
+ * 
+ * Predict how long it would take to add 128,000, 256,000, and 512,000 sorted integers into your
+ * binary search tree. <br>
+ * 
+ * The time to add 128,000 integers would be around 17.6 seconds (4.4 x 4). <br>
+ * The time to add 256,000 integers would be around 70.4 seconds (17.6 x 4). <br>
+ * The time to add 512,000 integers would be around 281.6 seconds (70.4 x 4). <br>
+ * 
+ * How do these times compare to the times it took for you BinarySearchTree class when inserting
+ * integers in sorted order? What do you think is the cause for these differences? <br>
+ * 
+ * These times are very significantly worse (for my BST). The BinarySearchTree class is much slower
+ * when adding integers in sorted order. The reason for this is that the BinarySearchTree class is
+ * not implementing a red-black tree. The BinarySearchTree class is using a naive algorithm which
+ * leads to the add() method being really slow since it has to go through every node to add the
+ * next.
  */
 public class BSTTester {
 
@@ -42,363 +118,161 @@ public class BSTTester {
      * @param args Not used
      */
     public static void main(String[] args) {
-        runAllGivenTests();
-        runExperiments();
+        runTests();
+        // runExperiments();
     }
 
-    private static void runAllGivenTests() {
-        BinarySearchTree<String> t = new BinarySearchTree<>();
+    private static void runTests() {
+        int testNum = 1;
+        
+        // test 1 - constructor
+        BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+        showTestResults(bst.size() == 0, testNum);
 
-        // test 1
-        System.out.println("Test 1: empty tree created.");
-        showTestResults(t.size() == 0, 1);
+        // test 2 - constructor
+        testNum++;
+        bst = new BinarySearchTree<>();
+        showTestResults(bst.height() == -1, testNum);
 
-        // test 2
-        System.out.println("Test 2: height of empty tree must be -1.");
-        showTestResults(t.height() == -1, 2);
+        // test 3 - add
+        testNum++;
+        bst.add(2);
+        showTestResults(bst.size() == 1, testNum);
 
-        // test 3
-        System.out.println("Test 3: empty tree must " + "not contain the String \"abyss\".");
-        showTestResults(t.isPresent("abyss") == false, 3);
+        // test 4 - add
+        testNum++;
+        bst.add(1);
+        showTestResults(bst.size() == 2, testNum);
 
-        t.add("abyss");
-        // test 4
-        System.out.println("Test 4: added \"abyss\" to the" + "tree. Size must be 1.");
-        showTestResults(t.size() == 1, 4);
+        // test 5 - remove
+        testNum++;
+        bst.remove(1);
+        showTestResults(bst.size() == 1, testNum);
 
-        // test 5
-        System.out.println("Test 5: height of tree with 1" + "element must be 0.");
-        showTestResults(t.height() == 0, 5);
+        // test 6 - remove
+        testNum++;
+        bst.remove(2);
+        showTestResults(bst.size() == 0, testNum);
 
-        // test 6
-        System.out.println("Test 6: \"abyss\" must be in the tree.");
-        showTestResults(t.isPresent("abyss") == true, 6);
+        // test 7 - isPresent
+        testNum++;
+        bst.add(3);
+        showTestResults(bst.isPresent(3), testNum);
 
-        // test 7
-        System.out.println("Test 7: tree must " + "not contain the String \"beep\".");
-        showTestResults(t.isPresent("beep") == false, 7);
+        // test 8 - isPresent
+        testNum++;
+        showTestResults(!bst.isPresent(2), testNum);
 
-        // test 8
-        System.out.println("Test 8: min value must be" + "\"abyss\" at this point.");
-        showTestResults(t.min().equals("abyss"), 8);
+        // test 9 - size
+        testNum++;
+        bst.add(1);
+        showTestResults(bst.size() == 2, testNum);
 
-        // test 9
-        System.out.println("Test 9: max value must be" + "\"abyss\" at this point.");
-        showTestResults(t.max().equals("abyss"), 9);
+        // test 10 - size
+        testNum++;
+        bst.add(2);
+        showTestResults(bst.size() == 3, testNum);
 
-        t.add("abyss");
-        // test 10
-        System.out.println("Test 10: attempt to add \"abyss\"" + "again. size must remain 1.");
-        showTestResults(t.size() == 1, 10);
+        // test 11 - height
+        testNum++;
+        showTestResults(bst.height() == 2, testNum);
 
-        // test 11
-        System.out.println("Test 11: attempt to add \"abyss\"" + "again. height must remain 0.");
-        showTestResults(t.height() == 0, 11);
+        // test 12 - height
+        testNum++;
+        bst.add(6);
+        showTestResults(bst.height() == 2, testNum);
 
-        // test 12
-        System.out.println("Test 12: \"abyss\" must still be" + "present.");
-        showTestResults(t.isPresent("abyss") == true, 12);
+        // test 13 - getAll
+        testNum++;
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(6);
+        showTestResults(bst.getAll().equals(list), testNum);
 
-        t.add("beep");
-        // test 13
-        System.out.println("Test 13: added \"beep\" to the" + "tree. Size must be 2.");
-        showTestResults(t.size() == 2, 13);
+        // test 14 - getAll
+        testNum++;
+        bst.add(4);
+        list.add(3, 4);
+        showTestResults(bst.getAll().equals(list), testNum);
 
-        // test 14
-        System.out.println("Test 14: height of tree with 2" + "elements must be 1.");
-        showTestResults(t.height() == 1, 14);
+        // test 15 - max
+        testNum++;
+        showTestResults(bst.max() == 6, testNum);
 
-        // test 15
-        System.out.println("Test 15: Removing \"abyss\" from the tree.");
-        showTestResults(t.remove("abyss") == true, 15);
+        // test 16 - max
+        testNum++;
+        bst.add(8);
+        showTestResults(bst.max() == 8, testNum);
 
-        // test 16
-        System.out.println("Test 16: Removing \"beep\" from the tree.");
-        showTestResults(t.remove("beep") == true, 16);
+        // test 17 - min
+        testNum++;
+        showTestResults(bst.min() == 1, testNum);
 
-        // test 17
-        System.out.println("Test 17: Tree must be empty at this point.");
-        showTestResults(t.size() == 0, 17);
+        // test 18 - min
+        testNum++;
+        bst.add(-1);
+        showTestResults(bst.min() == -1, testNum);
 
-        t.add("beep");
-        t.add("abyss");
-        t.add("calls");
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("abyss");
-        expected.add("beep");
-        expected.add("calls");
+        // test 19 - iterativeAdd
+        testNum++;
+        bst.iterativeAdd(0);
+        showTestResults(bst.size() == 8, testNum);
 
-        // test 18
-        System.out.println("Test 18: Added \"beep\", \"abyss\", and" + "\"calls\" to the tree in that order.\n"
-                + "Testing getAll method.");
+        // test 20 - iterativeAdd
+        testNum++;
+        bst.iterativeAdd(5);
+        showTestResults(bst.size() == 9, testNum);
 
-        showTestResults(expected.equals(t.getAll()) == true, 18);
+        // test 21 - get
+        testNum++;
+        showTestResults(bst.get(2) == 1, testNum);
 
-        // test 19
-        t.add("bit");
-        t.add("dish");
-        System.out.println("Test 19: Added \"bit\" and \"dish\" to" + "tree. Checking that \"yes\" is not present.");
-        showTestResults(t.remove("yes") == false, 19);
+        // test 22 - get
+        testNum++;
+        showTestResults(bst.get(6) == 5, testNum);
 
-        // test 20
-        t.add("a");
-        System.out.println("Test 20: Added \"a\" and then " + "removed it.");
-        showTestResults(t.remove("a") == true, 20);
+        // test 23 - getAllLessThan
+        testNum++;
+        list.clear();
+        list.add(-1);
+        list.add(0);
+        list.add(1);
+        list.add(2);
+        showTestResults(bst.getAllLessThan(3).equals(list), testNum);
 
-        // test 21
-        System.out.println("Test 21: Checking that \"calls\" is still present.");
-        showTestResults(t.remove("calls") == true, 21);
+        // test 24 - getAllLessThan
+        testNum++;
+        list.add(3);
+        list.add(4);
+        list.add(5);
+        showTestResults(bst.getAllLessThan(6).equals(list), testNum);
 
-        // test 22
-        t.remove("abyss");
-        System.out.println("Test 22: Removing \"abyss\". " + "Checking that \"beep\" is still present.");
-        showTestResults(t.remove("beep") == true, 22);
+        // test 25 - getAllGreaterThan
+        testNum++;
+        list.clear();
+        list.add(4);
+        list.add(5);
+        list.add(6);
+        list.add(8);
+        showTestResults(bst.getAllGreaterThan(3).equals(list), testNum);
 
-        // Test 23 - Adding unbalanced
-        BinarySearchTree<Integer> actualTree = new BinarySearchTree<>();
-        ArrayList<Integer> expectedValues = new ArrayList<>();
-        actualTree.add(1);
-        actualTree.iterativeAdd(2);
-        actualTree.iterativeAdd(3);
-        actualTree.add(-1);
-        expectedValues.add(-1);
-        expectedValues.add(1);
-        expectedValues.add(2);
-        expectedValues.add(3);
-        System.out.println("Test 23: Adding unbalanced");
-        showTestResults(expectedValues.equals(actualTree.getAll()) == true, 23);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
+        // test 26 - getAllGreaterThan
+        testNum++;
+        list.clear();
+        list.add(8);
+        showTestResults(bst.getAllGreaterThan(6).equals(list), testNum);
 
-        // Test 24 - Adding unbalanced
-        actualTree.iterativeAdd(-2);
-        expectedValues.add(0, -2);
-        System.out.println("Test 24: Adding unbalanced");
-        showTestResults(expectedValues.equals(actualTree.getAll()) == true, 24);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
+        // test 27 - numNodesAtDepth
+        testNum++;
+        showTestResults(bst.numNodesAtDepth(2) == 4, testNum);
 
-        // Test 25 - Removing root [-2, -1, 2, 3]
-        actualTree.remove(1);
-        expectedValues.remove(Integer.valueOf(1));
-        System.out.println("Test 25: Removing root");
-        showTestResults(expectedValues.equals(actualTree.getAll()) == true, 25);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
+        // test 28 - numNodesAtDepth
+        testNum++;
+        bst.add(10);
+        showTestResults(bst.numNodesAtDepth(3) == 3, testNum);
 
-        // Test 26 - Removing new root [-2, 2, 3]
-        actualTree.remove(-1);
-        expectedValues.remove(Integer.valueOf(-1));
-        System.out.println("Test 26: Removing new root");
-        showTestResults(expectedValues.equals(actualTree.getAll()) == true, 26);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 27 - IsPresent new root
-        System.out.println("Test 27: IsPresent new root");
-        showTestResults(actualTree.isPresent(-2) == true, 27);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 28 - IsPresent rightmost minimum
-        System.out.println("Test 28: isPresent, root of tree");
-        showTestResults(actualTree.isPresent(2) == true, 28);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 29 - Size
-        System.out.println("Test 29: Size of tree");
-        showTestResults(actualTree.size() == 3, 29);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 30 - Size removing rightmost minimum [-2, 3]
-        actualTree.remove(2);
-        expectedValues.remove(Integer.valueOf(2));
-        System.out.println("Test 30: Size of tree");
-        showTestResults(actualTree.size() == 2, 30);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 31 - Height
-        System.out.println("Test 31: Height of tree");
-        showTestResults(actualTree.height() == 1, 31);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 32 - Height removing root [3]
-        actualTree.remove(-2);
-        expectedValues.remove(Integer.valueOf(-2));
-        System.out.println("Test 32: Height of tree");
-        showTestResults(actualTree.height() == 0, 32);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 33 - Max of tree
-        System.out.println("Test 33: Max of tree");
-        showTestResults(actualTree.max().equals(Integer.valueOf(3)), 33);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 34 - Max of tree [-1, 3]
-        actualTree.add(-1);
-        System.out.println("Test 34: Max of tree");
-        showTestResults(actualTree.max().equals(Integer.valueOf(3)), 34);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 35 - Min of tree
-        System.out.println("Test 35: Min of tree");
-        showTestResults(actualTree.min().equals(Integer.valueOf(-1)), 35);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 36 - Min of tree
-        actualTree.add(4);
-        System.out.println("Test 36: Min of tree");
-        showTestResults(actualTree.min().equals(Integer.valueOf(-1)), 36);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 37 - Number of Nodes at Depth
-        System.out.println("Test 37: Number of Nodes at depth of tree");
-        showTestResults(actualTree.numNodesAtDepth(0) == 1, 37);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 38 - Number of Nodes at Depth
-        System.out.println("Test 38: Number of Nodes at depth of tree");
-        showTestResults(actualTree.numNodesAtDepth(1) == 2, 38);
-        // System.out.println(actualTree.getAll());
-        // actualTree.printTree();
-
-        // Test 39 - height
-        int[] values = { 50, 25, -10, 10, 5, 0, 23, 30, 35, 40, 100, 75, 200 };
-        BinarySearchTree<Integer> t2 = new BinarySearchTree<>();
-        for (int i : values) {
-            t2.add(i);
-        }
-        System.out.println("Height again for non trivial tree");
-        showTestResults(t2.height() == 5, 39);
-        // System.out.println(t2.getAll());
-        // t2.printTree();
-
-        // Test 40 - 52: get kth
-        System.out.println("getKth");
-        Arrays.sort(values);
-        for (int i = 0; i < values.length; i++) {
-            showTestResults(t2.get(i).equals(Integer.valueOf(values[i])), 40 + i);
-        }
-
-        // Test 53: getAllLessThan
-        System.out.println("get all less than -50");
-        showTestResults(t2.getAllLessThan(-50).equals(new ArrayList<Integer>()), 53);
-        // System.out.println(t2.getAll());
-        // t2.printTree();
-
-        // Test 54: getAllLessThan
-        System.out.println("get all less than 25");
-        ArrayList<Integer> expectedList = new ArrayList<>();
-        int cutoff = 25;
-        int index = 0;
-        while (index < values.length && values[index] < cutoff) {
-            expectedList.add(Integer.valueOf(values[index]));
-            index++;
-        }
-        List<Integer> actual = t2.getAllLessThan(cutoff);
-        showTestResults(actual.equals(expectedList), 54);
-        // System.out.println(t2.getAll());
-        // t2.printTree();
-
-        // Test 55: getAllLessThan
-        System.out.println("get all less than 1000");
-        expectedList.clear();
-        cutoff = 1000;
-        index = 0;
-        while (index < values.length && values[index] < cutoff) {
-            expectedList.add(Integer.valueOf(values[index]));
-            index++;
-        }
-        actual = t2.getAllLessThan(cutoff);
-        showTestResults(actual.equals(expectedList), 55);
-        System.out.println("expected list: " + expectedList);
-        System.out.println("actual list:   " + actual);
-        // System.out.println(expectedList);
-        // System.out.println(t2.getAll());
-        // t2.printTree();
-
-        // Test 57: getAllGreaterThan
-        System.out.println("get all greater than 1000");
-        expectedList.clear();
-        cutoff = 1000;
-        index = values.length - 1;
-        while (index >= 0 && values[index] > cutoff) {
-            expectedList.add(Integer.valueOf(values[index]));
-            index--;
-        }
-        Collections.reverse(expectedList);
-        actual = t2.getAllGreaterThan(cutoff);
-        showTestResults(actual.equals(expectedList), 57);
-        // System.out.println(expectedList);
-        // System.out.println(t2.getAll());
-        // t2.printTree();
-
-        // Test 58: getAllGreaterThan
-        System.out.println("get all greater than 25");
-        expectedList.clear();
-        cutoff = 25;
-        index = values.length - 1;
-        while (index >= 0 && values[index] > cutoff) {
-            expectedList.add(Integer.valueOf(values[index]));
-            index--;
-        }
-        Collections.reverse(expectedList);
-        actual = t2.getAllGreaterThan(cutoff);
-        showTestResults(actual.equals(expectedList), 58);
-        System.out.println("expected list: " + expectedList);
-        System.out.println("actual list:   " + actual);
-        // t2.printTree();
-
-        // Test 59: getAllGreaterThan
-        System.out.println("get all greater than -1000");
-        expectedList.clear();
-        cutoff = -1000;
-        index = values.length - 1;
-        while (index >= 0 && values[index] > cutoff) {
-            expectedList.add(Integer.valueOf(values[index]));
-            index--;
-        }
-        Collections.reverse(expectedList);
-        actual = t2.getAllGreaterThan(cutoff);
-        showTestResults(actual.equals(expectedList), 59);
-        System.out.println("expected list: " + expectedList);
-        System.out.println("actual list:   " + actual);
-        // t2.printTree();
-
-        // Test 60, stress test
-        System.out.println("Stress test, comparing size to HashSet");
-        BinarySearchTree<Integer> bst1 = new BinarySearchTree<>();
-        HashSet<Integer> hs = new HashSet<>();
-        Random r = new Random();
-        int numValues = 500_000;
-        for (int i = 0; i < numValues; i++) {
-            int temp = r.nextInt();
-            bst1.add(temp);
-            hs.add(temp);
-        }
-        showTestResults(hs.size() == bst1.size(), 60);
-
-        // Test 61, stress test
-        System.out.println("Stress test, comparing size to HashSet");
-        bst1 = new BinarySearchTree<>();
-        hs = new HashSet<>();
-        numValues = 1_000_000;
-        for (int i = 0; i < numValues; i++) {
-            int temp = r.nextInt();
-            bst1.add(temp);
-            hs.add(temp);
-        }
-        showTestResults(hs.size() == bst1.size(), 61);
     }
 
     private static void showTestResults(boolean passed, int testNum) {
@@ -417,11 +291,11 @@ public class BSTTester {
     }
 
     private static void randomInsertionExperiments(Stopwatch s) {
-        System.out.println("====================BINARY SEARCH TREE====================");
-        System.out.println("| N       | Average Time | Average Height | Average Size |");
+        System.out.println(" * ====================BINARY SEARCH TREE====================");
+        System.out.println(" * | N_______| Average Time | Average Height | Average Size |");
         randomizedInsertionWithBST(s);
-        System.out.println("==============JAVA TREE SET==============");
-        System.out.println("| N       | Average Time | Average Size |");
+        System.out.println(" * ==============JAVA TREE SET==============");
+        System.out.println(" * | N_______| Average Time | Average Size |");
         randomizedInsertionWithTreeSet(s);
     }
 
@@ -448,7 +322,7 @@ public class BSTTester {
             averageHeight /= 10.0;
             averageSize /= 10.0;
 
-            System.out.printf("| %-" + 7 + "s |", n);
+            System.out.printf(" * | %-" + 7 + "s |", n);
             System.out.printf(" %-" + 12 + "s |", String.format("%.10f", averageTime));
             System.out.printf(" %-" + 14 + "s |", averageHeight);
             System.out.printf(" %-" + 12 + "s |\n", averageSize);
@@ -476,7 +350,7 @@ public class BSTTester {
             averageTime /= 10.0;
             averageSize /= 10.0;
 
-            System.out.printf("| %-" + 7 + "s |", n);
+            System.out.printf(" * | %-" + 7 + "s |", n);
             System.out.printf(" %-" + 12 + "s |", String.format("%.10f", averageTime));
             System.out.printf(" %-" + 12 + "s |\n", averageSize);
         }
@@ -497,16 +371,66 @@ public class BSTTester {
     }
 
     private static void ascendingInsertionExperiments(Stopwatch s) {
-        int[] numbers = new int[1000];
-        for (int i = 0; i < numbers.length; i++) {
-            numbers[i] = i;
-        }
+        System.out.println(" * ====================BINARY SEARCH TREE====================");
+        System.out.println(" * | N_______| Average Time | Average Height | Average Size |");
+        ascendingInsertionWithBST(s);
+        System.out.println(" * ==============JAVA TREE SET==============");
+        System.out.println(" * | N_______| Average Time | Average Size |");
+        ascendingInsertionWithTreeSet(s);
+    }
 
-        System.out.println("====================BINARY SEARCH TREE====================");
-        System.out.println("| N       | Average Time | Average Height | Average Size |");
-        // ascendingInsertionWithBST(s);
-        System.out.println("==============JAVA TREE SET==============");
-        System.out.println("| N       | Average Time | Average Size |");
-        // ascendingInsertionWithTreeSet(s);
+    private static void ascendingInsertionWithBST(Stopwatch s) {
+        BinarySearchTree<Integer> tree;
+        int n = 500;
+        double averageTime;
+
+        for (int i = 0; i < 7; i++) {
+            n *= 2;
+            averageTime = 0.0;
+            for (int j = 0; j < 10; j++) {
+                tree = new BinarySearchTree<>();
+
+                s.start();
+                for (int k = 0; k < n; k++) {
+                    tree.iterativeAdd(k);
+                }
+                s.stop();
+                averageTime += s.time();
+            }
+
+            averageTime /= 10.0;
+
+            System.out.printf(" * | %-" + 7 + "s |", n);
+            System.out.printf(" %-" + 12 + "s |", String.format("%.10f", averageTime));
+            System.out.printf(" %-" + 14 + "s |", n - 1);
+            System.out.printf(" %-" + 12 + "s |\n", n);
+        }
+    }
+
+    private static void ascendingInsertionWithTreeSet(Stopwatch s) {
+        TreeSet<Integer> tree;
+        int n = 500;
+        double averageTime;
+
+        for (int i = 0; i < 7; i++) {
+            n *= 2;
+            averageTime = 0.0;
+            for (int j = 0; j < 10; j++) {
+                tree = new TreeSet<>();
+
+                s.start();
+                for (int k = 0; k < n; k++) {
+                    tree.add(k);
+                }
+                s.stop();
+                averageTime += s.time();
+            }
+
+            averageTime /= 10.0;
+
+            System.out.printf(" * | %-" + 7 + "s |", n);
+            System.out.printf(" %-" + 12 + "s |", String.format("%.10f", averageTime));
+            System.out.printf(" %-" + 12 + "s |\n", n);
+        }
     }
 }

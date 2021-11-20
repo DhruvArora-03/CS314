@@ -7,16 +7,12 @@
  * code to any other student.
  *
  * UTEID: da32895 <br>
- * emaill address: dhruvarora@utexas.edu <br>
+ * email address: dhruvarora@utexas.edu <br>
  * TA name: Grace <br>
- * Number of slip days I am using: 2
+ * Number of slip days I am using: 2 <br>
  */
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -124,7 +120,7 @@ public class BSTTester {
 
     private static void runTests() {
         int testNum = 1;
-        
+
         // test 1 - constructor
         BinarySearchTree<Integer> bst = new BinarySearchTree<>();
         showTestResults(bst.size() == 0, testNum);

@@ -6,10 +6,11 @@
  * On my honor, Dhruv Arora, this programming assignment is my own work and I have not provided this
  * code to any other student.
  *
- * UTEID: da32895 email address: dhruvarora@utexas.edu TA name: Grace Number of slip days I am
- * using: 0
+ * UTEID: da32895 <br>
+ * emaill address: dhruvarora@utexas.edu <br>
+ * TA name: Grace <br>
+ * Number of slip days I am using: 2
  */
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,17 @@ import java.util.TreeSet;
 
 /**
  * Some test cases for CS314 Binary Search Tree assignment.
- *
+ * 
+ * Experiment results:
+ * 
+ * Questions: <br>
+ * For each value of N what is the minimum possible tree height, assuming N
+ * unique values are inserted into the tree? <br>
+ * 
+ * The minimum possible height is given by floor(log base 2 of N).
+ * So for N = 1000, minHeight = 109
+ * 
+ * 
  */
 public class BSTTester {
 
@@ -31,8 +42,8 @@ public class BSTTester {
      * @param args Not used
      */
     public static void main(String[] args) {
+        runAllGivenTests();
         runExperiments();
-        // runAllGivenTests();
     }
 
     private static void runAllGivenTests() {
@@ -118,16 +129,15 @@ public class BSTTester {
         expected.add("calls");
 
         // test 18
-        System.out.println("Test 18: Added \"beep\", \"abyss\", and"
-                + "\"calls\" to the tree in that order.\n" + "Testing getAll method.");
+        System.out.println("Test 18: Added \"beep\", \"abyss\", and" + "\"calls\" to the tree in that order.\n"
+                + "Testing getAll method.");
 
         showTestResults(expected.equals(t.getAll()) == true, 18);
 
         // test 19
         t.add("bit");
         t.add("dish");
-        System.out.println("Test 19: Added \"bit\" and \"dish\" to"
-                + "tree. Checking that \"yes\" is not present.");
+        System.out.println("Test 19: Added \"bit\" and \"dish\" to" + "tree. Checking that \"yes\" is not present.");
         showTestResults(t.remove("yes") == false, 19);
 
         // test 20
@@ -141,8 +151,7 @@ public class BSTTester {
 
         // test 22
         t.remove("abyss");
-        System.out.println(
-                "Test 22: Removing \"abyss\". " + "Checking that \"beep\" is still present.");
+        System.out.println("Test 22: Removing \"abyss\". " + "Checking that \"beep\" is still present.");
         showTestResults(t.remove("beep") == true, 22);
 
         // Test 23 - Adding unbalanced
@@ -264,7 +273,7 @@ public class BSTTester {
         // actualTree.printTree();
 
         // Test 39 - height
-        int[] values = {50, 25, -10, 10, 5, 0, 23, 30, 35, 40, 100, 75, 200};
+        int[] values = { 50, 25, -10, 10, 5, 0, 23, 30, 35, 40, 100, 75, 200 };
         BinarySearchTree<Integer> t2 = new BinarySearchTree<>();
         for (int i : values) {
             t2.add(i);
@@ -286,7 +295,6 @@ public class BSTTester {
         showTestResults(t2.getAllLessThan(-50).equals(new ArrayList<Integer>()), 53);
         // System.out.println(t2.getAll());
         // t2.printTree();
-
 
         // Test 54: getAllLessThan
         System.out.println("get all less than 25");
@@ -318,7 +326,6 @@ public class BSTTester {
         // System.out.println(expectedList);
         // System.out.println(t2.getAll());
         // t2.printTree();
-
 
         // Test 57: getAllGreaterThan
         System.out.println("get all greater than 1000");
@@ -352,7 +359,6 @@ public class BSTTester {
         System.out.println("actual list:   " + actual);
         // t2.printTree();
 
-
         // Test 59: getAllGreaterThan
         System.out.println("get all greater than -1000");
         expectedList.clear();
@@ -368,7 +374,6 @@ public class BSTTester {
         System.out.println("expected list: " + expectedList);
         System.out.println("actual list:   " + actual);
         // t2.printTree();
-
 
         // Test 60, stress test
         System.out.println("Stress test, comparing size to HashSet");
@@ -406,7 +411,7 @@ public class BSTTester {
 
     private static void runExperiments() {
         Stopwatch s = new Stopwatch();
-        
+
         randomInsertionExperiments(s);
         ascendingInsertionExperiments(s);
     }
@@ -427,10 +432,10 @@ public class BSTTester {
 
         for (int i = 0; i < 11; i++) {
             n *= 2;
-            averageTime = averageHeight = averageSize = 0;
+            averageTime = averageHeight = averageSize = 0.0;
             for (int j = 0; j < 10; j++) {
                 tree = new BinarySearchTree<>();
-                
+
                 s.start();
                 addNRandomIntsToBST(n, tree);
                 s.stop();
@@ -438,13 +443,13 @@ public class BSTTester {
                 averageHeight += tree.height();
                 averageSize += tree.size();
             }
-            
-            averageTime /= 10;
-            averageHeight /= 10;
-            averageSize /= 10;
+
+            averageTime /= 10.0;
+            averageHeight /= 10.0;
+            averageSize /= 10.0;
 
             System.out.printf("| %-" + 7 + "s |", n);
-            System.out.printf(" %-" + 12 + "s |", String.format ("%.10f", averageTime));
+            System.out.printf(" %-" + 12 + "s |", String.format("%.10f", averageTime));
             System.out.printf(" %-" + 14 + "s |", averageHeight);
             System.out.printf(" %-" + 12 + "s |\n", averageSize);
         }
@@ -457,22 +462,22 @@ public class BSTTester {
 
         for (int i = 0; i < 11; i++) {
             n *= 2;
-            averageTime = averageSize = 0;
+            averageTime = averageSize = 0.0;
             for (int j = 0; j < 10; j++) {
                 tree = new TreeSet<>();
-                
+
                 s.start();
                 addNRandomIntsToTreeSet(n, tree);
                 s.stop();
                 averageTime += s.time();
                 averageSize += tree.size();
             }
-            
-            averageTime /= 10;
-            averageSize /= 10;
+
+            averageTime /= 10.0;
+            averageSize /= 10.0;
 
             System.out.printf("| %-" + 7 + "s |", n);
-            System.out.printf(" %-" + 12 + "s |", String.format ("%.10f", averageTime));
+            System.out.printf(" %-" + 12 + "s |", String.format("%.10f", averageTime));
             System.out.printf(" %-" + 12 + "s |\n", averageSize);
         }
     }

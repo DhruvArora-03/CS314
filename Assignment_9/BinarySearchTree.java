@@ -1,4 +1,4 @@
-/**
+/*
  * CS 314 STUDENTS: FILL IN THIS HEADER.
  *
  * Student information for assignment:
@@ -9,7 +9,7 @@
  * UTEID: da32895 <br>
  * email address: dhruvarora@utexas.edu <br>
  * TA name: Grace <br>
- * Number of slip days I am using: 0 <br>
+ * Number of slip days I am using: 2 <br>
  */
 
 import java.util.ArrayList;
@@ -19,8 +19,9 @@ import java.util.List;
  * Shell for a binary search tree class.
  * 
  * @author scottm
- * @param <E> The data type of the elements of this BinarySearchTree. Must implement Comparable or
- *        inherit from a class that implements Comparable.
+ * @param <E> The data type of the elements of this BinarySearchTree. Must
+ *            implement Comparable or inherit from a class that implements
+ *            Comparable.
  *
  */
 public class BinarySearchTree<E extends Comparable<? super E>> {
@@ -37,14 +38,15 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Add the specified item to this Binary Search Tree if it is not already present. <br>
+     * Add the specified item to this Binary Search Tree if it is not already
+     * present. <br>
      * pre: <tt>value</tt> != null<br>
-     * post: Add value to this tree if not already present. Return true if this tree changed as a
-     * result of this method call, false otherwise.
+     * post: Add value to this tree if not already present. Return true if this tree
+     * changed as a result of this method call, false otherwise.
      * 
      * @param value the value to add to the tree
-     * @return false if an item equivalent to value is already present in the tree, return true if
-     *         value is added to the tree and size() = old size() + 1
+     * @return false if an item equivalent to value is already present in the tree,
+     *         return true if value is added to the tree and size() = old size() + 1
      */
     public boolean add(E value) {
         // check preconditions
@@ -58,9 +60,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Helper method for add(). Go until 'fall off' tree or we find the val already exists
+     * Helper method for add(). Go until 'fall off' tree or we find the val already
+     * exists
      * 
-     * @param node the current node we are attempting to add at
+     * @param node  the current node we are attempting to add at
      * @param value the value which we wish to add
      * @return the node after the add is complete
      * 
@@ -84,12 +87,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Remove a specified item from this Binary Search Tree if it is present. <br>
      * pre: <tt>value</tt> != null<br>
-     * post: Remove value from the tree if present, return true if this tree changed as a result of
-     * this method call, false otherwise.
+     * post: Remove value from the tree if present, return true if this tree changed
+     * as a result of this method call, false otherwise.
      * 
      * @param value the value to remove from the tree if present
-     * @return false if value was not present returns true if value was present and size() = old
-     *         size() - 1
+     * @return false if value was not present returns true if value was present and
+     *         size() = old size() - 1
      */
     public boolean remove(E value) {
         // check preconditions
@@ -103,9 +106,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Helper method for remove(). Go until 'fall off' tree or we find the val to remove
+     * Helper method for remove(). Go until 'fall off' tree or we find the val to
+     * remove
      * 
-     * @param node the current node we are attempting to remove at
+     * @param node  the current node we are attempting to remove at
      * @param value the value which we wish to remove
      * @return the node after the remove is complete
      * 
@@ -157,7 +161,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Helper method for isPresent()
      * 
-     * @param node the node we are currently at
+     * @param node  the node we are currently at
      * @param value the value we are looking for
      * @return true/false if the value is found or not
      */
@@ -193,26 +197,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Get the size of a subtree at the given node. <br>
-     * 
-     * @param node the root of the subtree
-     * @return the number of items in the subtree
-     */
-    private int size(BSTNode<E> node) {
-        if (node == null) {
-            return 0;
-        } else if (node.equals(root)) {
-            return size();
-        }
-
-        return size(node.left) + size(node.right) + 1;
-    }
-
-    /**
      * return the height of this Binary Search Tree. <br>
      * pre: none<br>
-     * post: return the height of this tree. If the tree is empty return -1, otherwise return the
-     * height of the tree
+     * post: return the height of this tree. If the tree is empty return -1,
+     * otherwise return the height of the tree
      * 
      * @return the height of this tree or -1 if the tree is empty
      */
@@ -237,11 +225,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     /**
      * Return a list of all the elements in this Binary Search Tree. <br>
      * pre: none<br>
-     * post: return a List object with all data from the tree in ascending order. If the tree is
-     * empty return an empty List
+     * post: return a List object with all data from the tree in ascending order. If
+     * the tree is empty return an empty List
      * 
-     * @return a List object with all data from the tree in sorted order if the tree is empty return
-     *         an empty List
+     * @return a List object with all data from the tree in sorted order if the tree
+     *         is empty return an empty List
      */
     public List<E> getAll() {
         List<E> result = new ArrayList<>();
@@ -270,7 +258,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the maximum value in this tree
      */
     public E max() {
-        return root == null ? null : max(root);
+        // check preconditions
+        if (size == 0) {
+            throw new IllegalStateException("cannot find max of an empty tree");
+        }
+
+        return max(root);
     }
 
     /**
@@ -295,7 +288,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the minimum value in this tree
      */
     public E min() {
-        return root == null ? null : min(root);
+        // check preconditions
+        if (size == 0) {
+            throw new IllegalStateException("cannot find min of an empty tree");
+        }
+
+        return min(root);
     }
 
     /**
@@ -313,14 +311,21 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * An add method that implements the add algorithm iteratively instead of recursively. <br>
+     * An add method that implements the add algorithm iteratively instead of
+     * recursively. <br>
      * pre: data != null <br>
      * post: if data is not present add it to the tree, otherwise do nothing.
      * 
      * @param data the item to be added to this tree
-     * @return true if data was not present before this call to add, false otherwise.
+     * @return true if data was not present before this call to add, false
+     *         otherwise.
      */
     public boolean iterativeAdd(E data) {
+        // check preconditions
+        if (data == null) {
+            throw new IllegalArgumentException("data cannot be null");
+        }
+
         BSTNode<E> prev = null;
         BSTNode<E> curr = root;
 
@@ -341,11 +346,9 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         curr = new BSTNode<>(data); // curr now represents the node to be added
         if (prev == null) { // tree empty --> init root
             root = curr;
-        }
-        else if (prev.data.compareTo(data) > 0) { // value belongs on left
+        } else if (prev.data.compareTo(data) > 0) { // value belongs on left
             prev.left = curr;
-        }
-        else { // value belongs on right
+        } else { // value belongs on right
             prev.right = curr;
         }
         size++;
@@ -353,8 +356,9 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Return the "kth" element in this Binary Search Tree. If kth = 0 the smallest value (minimum)
-     * is returned. If kth = 1 the second smallest value is returned, and so forth. <br>
+     * Return the "kth" element in this Binary Search Tree. If kth = 0 the smallest
+     * value (minimum) is returned. If kth = 1 the second smallest value is
+     * returned, and so forth. <br>
      * pre: 0 <= kth < size()
      * 
      * @param kth indicates the rank of the element to get
@@ -374,7 +378,8 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * Helper method for get(). Get the kth element in the subtree of node. <br>
      * 
      * @param node the root of the subtree we are currently at
-     * @param k singleton array containing the value of k (used to pass by reference)
+     * @param k    singleton array containing the value of k (used to pass by
+     *             reference)
      * @return the kth element in the subtree of node
      */
     private E get(BSTNode<E> node, int[] k) {
@@ -384,7 +389,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
         // check left subtree
         E result = get(node.left, k);
-        
+
         // if not found in left subtree, check this node and decrement k
         if (result == null && k[0] <= 0) {
             // k == 0 --> we are at the kth element
@@ -400,15 +405,20 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Return a List with all values in this Binary Search Tree that are less than the parameter
-     * <tt>value</tt>. <tt>value</tt> != null<br>
+     * Return a List with all values in this Binary Search Tree that are less than
+     * the parameter <tt>value</tt>. <tt>value</tt> != null<br>
      * 
      * @param value the cutoff value
-     * @return a List with all values in this tree that are less than the parameter value. If there
-     *         are no values in this tree less than value return an empty list. The elements of the
-     *         list are in ascending order.
+     * @return a List with all values in this tree that are less than the parameter
+     *         value. If there are no values in this tree less than value return an
+     *         empty list. The elements of the list are in ascending order.
      */
     public List<E> getAllLessThan(E value) {
+        // check preconditions
+        if (value == null) {
+            throw new IllegalArgumentException("value cannot be null");
+        }
+
         List<E> result = new ArrayList<>();
         getAllLessThan(result, root, value);
         return result;
@@ -418,14 +428,14 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * Helper method for getAllLessThan()
      * 
      * @param result list to store results
-     * @param node the subtree we are currently at
-     * @param value the value we want less than
+     * @param node   the subtree we are currently at
+     * @param value  the value we want less than
      */
     private void getAllLessThan(List<E> result, BSTNode<E> node, E value) {
         if (node != null) {
             // check left subtree always
             getAllLessThan(result, node.left, value);
-            
+
             if (node.data.compareTo(value) < 0) {
                 // if this node's data < value --> add it to list and check right subtree
                 result.add(node.data);
@@ -435,15 +445,21 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Return a List with all values in this Binary Search Tree that are greater than the parameter
-     * <tt>value</tt>. <tt>value</tt> != null<br>
+     * Return a List with all values in this Binary Search Tree that are greater
+     * than the parameter <tt>value</tt>. <tt>value</tt> != null<br>
      * 
      * @param value the cutoff value
-     * @return a List with all values in this tree that are greater than the parameter value. If
-     *         there are no values in this tree greater than value return an empty list. The
-     *         elements of the list are in ascending order.
+     * @return a List with all values in this tree that are greater than the
+     *         parameter value. If there are no values in this tree greater than
+     *         value return an empty list. The elements of the list are in ascending
+     *         order.
      */
     public List<E> getAllGreaterThan(E value) {
+        // check preconditions
+        if (value == null) {
+            throw new IllegalArgumentException("value cannot be null");
+        }
+
         List<E> result = new ArrayList<>();
         getAllGreaterThan(result, root, value);
         return result;
@@ -473,7 +489,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     private int numNodesAtDepth(BSTNode<E> node, int d) {
         if (node == null) { // fell off tree before reaching depth d
             return 0;
-        } else if (d == 0) { // found depth d --> + 1
+        } else if (d <= 0) { // found depth d --> + 1
             return 1;
         } else { // search deeper
             return numNodesAtDepth(node.left, d - 1) + numNodesAtDepth(node.right, d - 1);
@@ -481,10 +497,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Prints a vertical representation of this tree. The tree has been rotated counter clockwise 90
-     * degrees. The root is on the left. Each node is printed out on its own row. A node's children
-     * will not necessarily be at the rows directly above and below a row. They will be indented
-     * three spaces from the parent. Nodes indented the same amount are at the same depth. <br>
+     * Prints a vertical representation of this tree. The tree has been rotated
+     * counter clockwise 90 degrees. The root is on the left. Each node is printed
+     * out on its own row. A node's children will not necessarily be at the rows
+     * directly above and below a row. They will be indented three spaces from the
+     * parent. Nodes indented the same amount are at the same depth. <br>
      * pre: none
      */
     public void printTree() {

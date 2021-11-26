@@ -9,7 +9,7 @@
  * UTEID: da32895 <br>
  * email address: dhruvarora@utexas.edu <br>
  * TA name: Grace <br>
- * Number of slip days I am using: 0 <br>
+ * Number of slip days I am using: 2 <br>
  */
 
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import java.util.List;
  *
  */
 public class BinarySearchTree<E extends Comparable<? super E>> {
-
     private BSTNode<E> root;
     private int size;
 
@@ -66,10 +65,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * 
      */
     private BSTNode<E> addHelper(BSTNode<E> node, E value) {
+        // base case
         if (node == null) {
             size++;
             return new BSTNode<>(value);
         }
+
         int comparison = value.compareTo(node.data);
         if (comparison < 0) { // value is less --> go left
             node.left = addHelper(node.left, value);
@@ -193,22 +194,6 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Get the size of a subtree at the given node. <br>
-     * 
-     * @param node the root of the subtree
-     * @return the number of items in the subtree
-     */
-    private int size(BSTNode<E> node) {
-        if (node == null) {
-            return 0;
-        } else if (node.equals(root)) {
-            return size();
-        }
-
-        return size(node.left) + size(node.right) + 1;
-    }
-
-    /**
      * return the height of this Binary Search Tree. <br>
      * pre: none<br>
      * post: return the height of this tree. If the tree is empty return -1, otherwise return the
@@ -227,10 +212,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the height of this subtree
      */
     private int height(BSTNode<E> node) {
+        // base case
         if (node == null) {
             return -1;
         }
-        // find max height of the two child subtrees
+
+        // recurse to find max height of the two child subtrees and return 1 + that
         return 1 + Math.max(height(node.left), height(node.right));
     }
 
@@ -255,7 +242,8 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return a List<E> of all
      */
     private void getAll(List<E> result, BSTNode<E> node) {
-        if (node != null) {
+        if (node != null) { // if !(base case)
+            // in order traversal: left, root, right
             getAll(result, node.left);
             result.add(node.data);
             getAll(result, node.right);
@@ -270,7 +258,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the maximum value in this tree
      */
     public E max() {
-        return root == null ? null : max(root);
+        // check preconditions
+        if (size == 0) {
+            throw new IllegalStateException("cannot find max of an empty tree");
+        }
+
+        return max(root);
     }
 
     /**
@@ -280,6 +273,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the maximum value in this subtree
      */
     private E max(BSTNode<E> node) {
+        // go right until we hit a null, and then return the data
         if (node.right != null) {
             return max(node.right);
         }
@@ -295,7 +289,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the minimum value in this tree
      */
     public E min() {
-        return root == null ? null : min(root);
+        // check preconditions
+        if (size == 0) {
+            throw new IllegalStateException("cannot find min of an empty tree");
+        }
+
+        return min(root);
     }
 
     /**
@@ -305,6 +304,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the maximum value in this subtree
      */
     private E min(BSTNode<E> node) {
+        // go left until we hit a null, and then return the data
         if (node.left != null) {
             return min(node.left);
         }
@@ -321,11 +321,16 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return true if data was not present before this call to add, false otherwise.
      */
     public boolean iterativeAdd(E data) {
+        // check preconditions
+        if (data == null) {
+            throw new IllegalArgumentException("data cannot be null");
+        }
+
         BSTNode<E> prev = null;
         BSTNode<E> curr = root;
 
         while (curr != null) {
-            prev = curr;
+            prev = curr; // keep track of the previous node
 
             int comparison = curr.data.compareTo(data);
             if (comparison > 0) { // data belongs in left subtree
@@ -339,13 +344,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         }
 
         curr = new BSTNode<>(data); // curr now represents the node to be added
-        if (prev == null) { // tree empty --> init root
+        if (prev == null) { // prev == null --> tree empty --> init root
             root = curr;
-        }
-        else if (prev.data.compareTo(data) > 0) { // value belongs on left
+        } else if (prev.data.compareTo(data) > 0) { // value belongs on left
             prev.left = curr;
-        }
-        else { // value belongs on right
+        } else { // value belongs on right
             prev.right = curr;
         }
         size++;
@@ -366,7 +369,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             throw new IllegalArgumentException("kth cannot be out of bounds");
         }
 
-        int[] k = { kth }; // so that we can pass by reference
+        int[] k = {kth}; // so that we can pass by reference
         return get(root, k);
     }
 
@@ -384,11 +387,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
         // check left subtree
         E result = get(node.left, k);
-        
-        // if not found in left subtree, check this node and decrement k
+
+        // if not found in left subtree, check this node and decrement k (if we are not at kth elem)
         if (result == null && k[0] <= 0) {
-            // k == 0 --> we are at the kth element
-            result = node.data;
+            result = node.data; // k == 0 --> we are at the kth element
         } else {
             k[0]--;
         }
@@ -409,6 +411,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         list are in ascending order.
      */
     public List<E> getAllLessThan(E value) {
+        // check preconditions
+        if (value == null) {
+            throw new IllegalArgumentException("value cannot be null");
+        }
+
         List<E> result = new ArrayList<>();
         getAllLessThan(result, root, value);
         return result;
@@ -425,11 +432,10 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         if (node != null) {
             // check left subtree always
             getAllLessThan(result, node.left, value);
-            
+
             if (node.data.compareTo(value) < 0) {
-                // if this node's data < value --> add it to list and check right subtree
-                result.add(node.data);
-                getAllLessThan(result, node.right, value);
+                result.add(node.data); // if this node's data < value --> add it to list
+                getAllLessThan(result, node.right, value); // only have to check if node is valid
             }
         }
     }
@@ -444,6 +450,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *         elements of the list are in ascending order.
      */
     public List<E> getAllGreaterThan(E value) {
+        // check preconditions
+        if (value == null) {
+            throw new IllegalArgumentException("value cannot be null");
+        }
+
         List<E> result = new ArrayList<>();
         getAllGreaterThan(result, root, value);
         return result;
@@ -452,9 +463,11 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     private void getAllGreaterThan(List<E> result, BSTNode<E> node, E value) {
         if (node != null) {
             if (node.data.compareTo(value) > 0) {
-                getAllGreaterThan(result, node.left, value);
-                result.add(node.data);
+                getAllGreaterThan(result, node.left, value); // only have to check if node is valid
+                result.add(node.data); // if this node's data > value --> add it to list
             }
+
+            // check right subtree always
             getAllGreaterThan(result, node.right, value);
         }
     }
@@ -473,7 +486,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     private int numNodesAtDepth(BSTNode<E> node, int d) {
         if (node == null) { // fell off tree before reaching depth d
             return 0;
-        } else if (d == 0) { // found depth d --> + 1
+        } else if (d <= 0) { // found depth d --> + 1
             return 1;
         } else { // search deeper
             return numNodesAtDepth(node.left, d - 1) + numNodesAtDepth(node.right, d - 1);

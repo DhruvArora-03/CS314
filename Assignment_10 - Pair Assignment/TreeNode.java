@@ -116,7 +116,6 @@ public class TreeNode implements Comparable<TreeNode> {
         return right;
     }
 
-
     /**
      * Is this node a leaf or not.
      * @return true if this node is a leaf, false if it is an internal node

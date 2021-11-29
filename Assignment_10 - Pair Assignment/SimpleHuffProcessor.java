@@ -67,6 +67,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
 
         myViewer.update("created codes\n" + Arrays.toString(codes));
 
+        bitsIn.close();
         // TODO make method to figure out num of bits used - header, tree, data, eof
         return -1;
     }
@@ -148,21 +149,38 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         // check if the file is 'valid' by confirming the magic number
         BitInputStream bitsIn = new BitInputStream(in);
         BitOutputStream bitsOut = new BitOutputStream(out);
-        if (!(bitsIn.readBits(BITS_PER_WORD) == MAGIC_NUMBER)) {
+        if (!(bitsIn.readBits(BITS_PER_INT) == MAGIC_NUMBER)) {
             myViewer.showError("Error reading compressed file. \n"
                     + "File did not start with the huff magic number.");
+            bitsIn.close();
+            bitsOut.close();
             return -1;
         }
 
         // check if we are using SCF or STF and create the appropriate tree
         boolean inputIsSTF = bitsIn.readBits(BITS_PER_INT) == STORE_TREE;
-        TreeNode tree = inputIsSTF ? readSTF(bitsIn) : readSCF(bitsIn);
+        TreeNode tree;
+        if (inputIsSTF) {
+            // read # of bits val from data
+            int sizeOfTree = bitsIn.readBits(BITS_PER_INT);
+            myViewer.update("Size of uncompressing tree " + sizeOfTree);
+            tree = readSTF(bitsIn);
+        } else {
+            tree = readSCF(bitsIn);
+        }
+
+        myViewer.update(String.format("Uncompressed %s data and created new tree for decoding.",
+                inputIsSTF ? "tree" : "freq"));
 
         // read bits and use the tree to convert to original data
 
         int bitsWritten = decode(tree, bitsIn, bitsOut);
 
-        return -1;
+        myViewer.update("uncompressing complete :)");
+
+        bitsIn.close();
+        bitsOut.close();
+        return bitsWritten;
     }
 
     /**
@@ -192,7 +210,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
      */
     private TreeNode readSTF(BitInputStream bitsIn) throws IOException {
         // if the next bit represents a parent
-        if (bitsIn.read() == 0) {
+        if (bitsIn.readBits(1) == 0) {
             TreeNode node = new TreeNode(-1, -1); // all freq = -1 because they no longer matter
             node.setLeft(readSTF(bitsIn));
             node.setRight(readSTF(bitsIn));
@@ -200,7 +218,8 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         }
         // otherwise the bit we read represents a leaf
         else {
-            int val = bitsIn.readBits(BITS_PER_INT);
+            int val = bitsIn.readBits(BITS_PER_WORD + 1);
+            myViewer.update(" " + val);
             return new TreeNode(val, -1); // all freq = -1 because they no longer matter
         }
     }
@@ -215,9 +234,8 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         while (!done) {
             int bit = bitsIn.readBits(1);
             if (bit == -1) {
-                throw new IOException(
-                        "Error reading compressed file. " +
-                        "\n unexpected end of input. No PSEUDO_EOF value.");
+                throw new IOException("Error reading compressed file. "
+                        + "\n unexpected end of input. No PSEUDO_EOF value.");
             } else {
                 // move left or right in tree based on value of bit
                 if (bit == 0) {

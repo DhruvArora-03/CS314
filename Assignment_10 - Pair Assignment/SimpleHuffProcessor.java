@@ -81,21 +81,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         int compressedBits = BITS_PER_INT * 2; // store magic num and header format
 
         if (headerFormat == STORE_TREE) {
-            // STF BITS_PER_INT for size of tree + 1 per node, + 9 per leaf
-            compressedBits += BITS_PER_INT;
-
-            // # of nodes is size of the tree which is the value of the root
-            compressedBits += root.getValue();
-
-            // add 9 for every leaf, if freq > 0 --> is a leaf
-            for (int freq : freqs) {
-                if (freq > 0) {
-                    compressedBits += 9;
-                }
-            }
-
-            // (and one more for PEOF)
-            compressedBits += 9;
+            compressedBits += bitsOfTreeRepresentation();
         } else if (headerFormat == STORE_COUNTS) {
             // SCF BITS PER INT * ALPH_SIZE
             compressedBits += BITS_PER_INT * ALPH_SIZE;
@@ -113,6 +99,33 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         compressedBits += codes[PSEUDO_EOF].numBits;
 
         return uncompressedBits - compressedBits;
+    }
+
+    /**
+     * Get the number of bits needed to represent a tree
+     * 
+     * @return the number of bits that would be used to write the tree in STF
+     */
+    private int bitsOfTreeRepresentation() {
+        int bits = 0;
+
+        // STF BITS_PER_INT for size of tree + 1 per node, + 9 per leaf
+        bits += BITS_PER_INT;
+
+        // # of nodes is size of the tree which is the value of the root
+        bits += root.getValue();
+
+        // add 9 for every leaf, if freq > 0 --> is a leaf
+        for (int freq : freqs) {
+            if (freq > 0) {
+                bits += 9;
+            }
+        }
+
+        // (and one more for PEOF)
+        bits += 9;
+
+        return bits;
     }
 
     private TreeNode createTreeFromFreqs(int[] inputFreqs) {
@@ -181,11 +194,42 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         BitOutputStream bitsOut = new BitOutputStream(out);
 
         // write the magic number
+        bitsOut.writeBits(BITS_PER_INT, MAGIC_NUMBER);
+
+        // write format (SCF vs STF)
+        bitsOut.writeBits(BITS_PER_INT, headerFormat);
+
+        // write counts/tree according to format
+        if (headerFormat == STORE_TREE) { // write tree
+            bitsOut.writeBits(BITS_PER_INT, bitsOfTreeRepresentation());
+            writeTree(bitsOut, root);
+        } else if (headerFormat == STORE_COUNTS) { // write counts
+            for (int i = 0; i < IHuffConstants.ALPH_SIZE; i++) {
+                bitsOut.writeBits(BITS_PER_INT, freqs[i]);
+            }
+        }
+
+        // write data
+
         
 
-        //
+        // write PEOF
 
         return 0;
+    }
+
+    private void writeTree(BitOutputStream bitsOut, TreeNode node) {
+        if (node != null) {
+            if (node.isLeaf()) {
+                bitsOut.writeBits(1, 1);
+                bitsOut.writeBits(9, node.getValue());
+            } else {
+                // preorder: this --> left --> right
+                bitsOut.writeBits(1, 0);
+                writeTree(bitsOut, node.getLeft());
+                writeTree(bitsOut, node.getRight());
+            }
+        }
     }
 
     /**
@@ -210,19 +254,19 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         }
 
         // check if we are using SCF or STF and create the appropriate tree
-        boolean inputIsSTF = bitsIn.readBits(BITS_PER_INT) == STORE_TREE;
-        TreeNode tree;
-        if (inputIsSTF) {
+        int format = bitsIn.readBits(BITS_PER_INT);
+        TreeNode tree = null;
+        if (format == STORE_TREE) {
             // read # of bits val from data
             int sizeOfTree = bitsIn.readBits(BITS_PER_INT);
             myViewer.update("Size of uncompressing tree " + sizeOfTree);
             tree = readSTF(bitsIn);
-        } else {
+        } else if (format == STORE_COUNTS) {
             tree = readSCF(bitsIn);
         }
 
         myViewer.update(String.format("Uncompressed %s data and created new tree for decoding.",
-                inputIsSTF ? "tree" : "freq"));
+                format == STORE_TREE ? "tree" : "freq"));
 
         // read bits and use the tree to convert to original data
 

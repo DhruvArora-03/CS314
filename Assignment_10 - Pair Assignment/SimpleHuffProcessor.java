@@ -58,29 +58,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
 
         myViewer.update("found freqs: " + Arrays.toString(freqs));
 
-        // add the frequencies to the queue
-        PriorityQueue<TreeNode> queue = new PriorityQueue<>();
-
-        for (int i = 0; i < freqs.length; i++) {
-            if (freqs[i] > 0) {
-                queue.enqueue(new TreeNode(i, freqs[i]));
-            }
-        }
-
-        // PEOF added
-        queue.enqueue(new TreeNode(PSEUDO_EOF, 1));
-
-        myViewer.update("added freqs to queue");
-
-        // create a tree from the queue
-        while (!queue.isSizeOne()) {
-            TreeNode left = queue.dequeue();
-            TreeNode right = queue.dequeue();
-            TreeNode parent = new TreeNode(left, -1, right);
-            queue.enqueue(parent);
-        }
-
-        root = queue.dequeue();
+        root = createTreeFromFreqs(freqs);
 
         myViewer.update("created tree toString of root: " + root.toString());
 
@@ -91,6 +69,30 @@ public class SimpleHuffProcessor implements IHuffProcessor {
 
         // TODO make method to figure out num of bits used - header, tree, data, eof
         return -1;
+    }
+
+    private TreeNode createTreeFromFreqs(int[] inputFreqs) {
+        // add the frequencies to the queue
+        PriorityQueue<TreeNode> queue = new PriorityQueue<>();
+
+        for (int i = 0; i < inputFreqs.length; i++) {
+            if (inputFreqs[i] > 0) {
+                queue.enqueue(new TreeNode(i, inputFreqs[i]));
+            }
+        }
+
+        // PEOF added
+        queue.enqueue(new TreeNode(PSEUDO_EOF, 1));
+
+        // create a tree from the queue
+        while (!queue.isSizeOne()) {
+            TreeNode left = queue.dequeue();
+            TreeNode right = queue.dequeue();
+            TreeNode parent = new TreeNode(left, -1, right);
+            queue.enqueue(parent);
+        }
+
+        return queue.dequeue();
     }
 
     /**
@@ -146,52 +148,99 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         // check if the file is 'valid' by confirming the magic number
         BitInputStream bitsIn = new BitInputStream(in);
         BitOutputStream bitsOut = new BitOutputStream(out);
-        if (!bitsIn.readBits(BITS_PER_WORD) == MAGIC_NUMBER) {
-            viewer.showError("Error reading compressed file. \n"
+        if (!(bitsIn.readBits(BITS_PER_WORD) == MAGIC_NUMBER)) {
+            myViewer.showError("Error reading compressed file. \n"
                     + "File did not start with the huff magic number.");
             return -1;
         }
 
         // check if we are using SCF or STF and create the appropriate tree
-        TreeNode tree = null;
+        boolean inputIsSTF = bitsIn.readBits(BITS_PER_INT) == STORE_TREE;
+        TreeNode tree = inputIsSTF ? readSTF(bitsIn) : readSCF(bitsIn);
 
         // read bits and use the tree to convert to original data
 
+        int bitsWritten = decode(tree, bitsIn, bitsOut);
 
+        return -1;
+    }
 
+    /**
+     * Create a tree using SCF.
+     * 
+     * @param bitsIn input stream to read data from
+     * @return the root of the tree represented by the data
+     * @throws IOException
+     */
+    private TreeNode readSCF(BitInputStream bitsIn) throws IOException {
+        // read and create a freq array
+        int[] tempFreqs = new int[ALPH_SIZE];
+
+        for (int k = 0; k < IHuffConstants.ALPH_SIZE; k++) {
+            tempFreqs[k] = bitsIn.readBits(BITS_PER_INT);
+        }
+
+        return createTreeFromFreqs(tempFreqs);
+    }
+
+    /**
+     * Create a tree using STF.
+     * 
+     * @param bitsIn input stream to read data from
+     * @return the root of the tree represented by the data
+     * @throws IOException
+     */
+    private TreeNode readSTF(BitInputStream bitsIn) throws IOException {
+        // if the next bit represents a parent
+        if (bitsIn.read() == 0) {
+            TreeNode node = new TreeNode(-1, -1); // all freq = -1 because they no longer matter
+            node.setLeft(readSTF(bitsIn));
+            node.setRight(readSTF(bitsIn));
+            return node;
+        }
+        // otherwise the bit we read represents a leaf
+        else {
+            int val = bitsIn.readBits(BITS_PER_INT);
+            return new TreeNode(val, -1); // all freq = -1 because they no longer matter
+        }
     }
 
     // read 1 bit at a time and walk tree
-    private int decode(TreeNode<E> treeRoot, BitInputStream bitsIn, BitOutputStream bitsOut)
+    private int decode(TreeNode treeRoot, BitInputStream bitsIn, BitOutputStream bitsOut)
             throws IOException {
         // get ready to walk tree, start at root
         boolean done = false;
-        TreeNode<E> curr = treeRoot;
+        TreeNode curr = treeRoot;
+        int bitsWritten = 0;
         while (!done) {
             int bit = bitsIn.readBits(1);
             if (bit == -1) {
                 throw new IOException(
-                        "Error reading compressed file. \n unexpected end of input. No PSEUDO_EOF value.");
+                        "Error reading compressed file. " +
+                        "\n unexpected end of input. No PSEUDO_EOF value.");
             } else {
                 // move left or right in tree based on value of bit
                 if (bit == 0) {
-                    curr = curr.left;
+                    curr = curr.getLeft();
                 } else {
-                    curr = curr.right;
+                    curr = curr.getRight();
                 }
 
                 if (curr.isLeaf()) {
-                    if (curr.value.equals(PSEUDO_EOF)) {
+                    if (curr.getValue() == PSEUDO_EOF) {
                         done = true;
                     } else {
                         // write out value in leaf to output
-                        bitsOut.writeBits(BITS_PER_WORD, curr.value);
-                        // get back to root of tree
+                        bitsOut.writeBits(BITS_PER_WORD, curr.getValue());
+                        bitsWritten += BITS_PER_WORD;
+                        // go back to root of tree
                         curr = treeRoot;
                     }
                 }
             }
         }
+
+        return bitsWritten;
     }
 
     public void setViewer(IHuffViewer viewer) {

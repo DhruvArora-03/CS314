@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class SimpleHuffProcessor implements IHuffProcessor {
 
@@ -28,6 +29,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
     private int[] freqs;
     private TreeNode root;
     private HuffCode[] codes;
+    private int headerFormat;
 
     /**
      * Preprocess data so that compression is possible --- count characters/create tree/store state
@@ -63,18 +65,59 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         myViewer.update("created tree toString of root: " + root.toString());
 
         // store the codes of each character
-        codes = createCodes(new HuffCode[PSEUDO_EOF], root, "");
+        codes = createCodes(new HuffCode[ALPH_SIZE + 1], root, ""); // + 1 for PEOF
 
         myViewer.update("created codes\n" + Arrays.toString(codes));
 
+        // save headerFormat
+        this.headerFormat = headerFormat;
+
         bitsIn.close();
-        // TODO make method to figure out num of bits used - header, tree, data, eof
-        return -1;
+
+        return calculateSavedBits(headerFormat);
+    }
+
+    private int calculateSavedBits(int headerFormat) {
+        int compressedBits = BITS_PER_INT * 2; // store magic num and header format
+
+        if (headerFormat == STORE_TREE) {
+            // STF BITS_PER_INT for size of tree + 1 per node, + 9 per leaf
+            compressedBits += BITS_PER_INT;
+
+            // # of nodes is size of the tree which is the value of the root
+            compressedBits += root.getValue();
+
+            // add 9 for every leaf, if freq > 0 --> is a leaf
+            for (int freq : freqs) {
+                if (freq > 0) {
+                    compressedBits += 9;
+                }
+            }
+
+            // (and one more for PEOF)
+            compressedBits += 9;
+        } else if (headerFormat == STORE_COUNTS) {
+            // SCF BITS PER INT * ALPH_SIZE
+            compressedBits += BITS_PER_INT * ALPH_SIZE;
+        }
+        int uncompressedBits = 0;
+        // count bits used in compressed version
+        for (int i = 0; i < freqs.length; i++) {
+            // we have a code iff the freq > 0
+            if (freqs[i] > 0) {
+                compressedBits += freqs[i] * codes[i].numBits;
+                uncompressedBits += freqs[i] * BITS_PER_WORD;
+            }
+        }
+
+        compressedBits += codes[PSEUDO_EOF].numBits;
+
+        return uncompressedBits - compressedBits;
     }
 
     private TreeNode createTreeFromFreqs(int[] inputFreqs) {
         // add the frequencies to the queue
-        PriorityQueue<TreeNode> queue = new PriorityQueue<>();
+        PQ<TreeNode> queue = new PQ<>();
 
         for (int i = 0; i < inputFreqs.length; i++) {
             if (inputFreqs[i] > 0) {
@@ -89,7 +132,9 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         while (!queue.isSizeOne()) {
             TreeNode left = queue.dequeue();
             TreeNode right = queue.dequeue();
-            TreeNode parent = new TreeNode(left, -1, right);
+            // the value of a non-leaf node is the size of the subtree at the node
+            TreeNode parent = new TreeNode(left, (left.isLeaf() ? 1 : left.getValue())
+                    + (right.isLeaf() ? 1 : right.getValue()) + 1, right);
             queue.enqueue(parent);
         }
 
@@ -132,8 +177,15 @@ public class SimpleHuffProcessor implements IHuffProcessor {
      *         output file.
      */
     public int compress(InputStream in, OutputStream out, boolean force) throws IOException {
-        throw new IOException("compress is not implemented");
-        // return 0;
+        BitInputStream bitsIn = new BitInputStream(in);
+        BitOutputStream bitsOut = new BitOutputStream(out);
+
+        // write the magic number
+        
+
+        //
+
+        return 0;
     }
 
     /**
@@ -282,6 +334,83 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         @Override
         public String toString() {
             return "HuffCode [numBits=" + numBits + ", value=" + value + "]";
+        }
+    }
+
+    private class PQ<E extends Comparable<E>> {
+        private final Node<E> HEADER; // data is NOT sorted
+        private Node<E> last;
+
+        private PQ() {
+            HEADER = new Node<E>(null, null);
+            last = HEADER;
+        }
+
+        /**
+         * Adds a given element to the priority queue.
+         * 
+         * @param element E to be added, element != null
+         */
+        private void enqueue(E element) {
+            if (element == null) {
+                throw new IllegalArgumentException("element cannot be null");
+            }
+
+            last.next = new Node<E>(element, null);
+            last = last.next;
+        }
+
+        /**
+         * Removes and returns the element with the lowest priority. Cannot be used on empty queue.
+         * 
+         * @return The element with the lowest priority.
+         */
+        private E dequeue() {
+            if (last == HEADER) {
+                throw new NoSuchElementException("Priority queue is empty");
+            }
+
+            // search for the min element, not updating if tied
+            Node<E> min = HEADER.next;
+            Node<E> prevMin = HEADER;
+            Node<E> curr = HEADER.next;
+            Node<E> prevCurr = HEADER;
+
+            while (curr != null) {
+                E currVal = curr.value;
+
+                if (min.value.compareTo(currVal) > 0) { // min > curr --> min = curr
+                    min = curr;
+                    prevMin = prevCurr;
+                }
+
+                prevCurr = curr;
+                curr = curr.next;
+            }
+            prevMin.next = min.next; // remove
+
+            if (min == last) {
+                last = prevMin;
+            }
+
+            return min.value;
+        }
+
+        /**
+         * Tells us if the queue has a size of one.
+         */
+        private boolean isSizeOne() {
+            return last == HEADER.next;
+        }
+
+        private class Node<E extends Comparable<E>> {
+            E value;
+            Node<E> next;
+
+            Node(E value, Node<E> next) {
+                this.value = value;
+                this.next = next;
+            }
         }
     }
 }

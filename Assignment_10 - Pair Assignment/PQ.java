@@ -1,12 +1,11 @@
 import java.util.NoSuchElementException;
+import javax.sound.sampled.SourceDataLine;
 
 public class PQ<E extends Comparable<E>> {
-    private final Node<E> HEADER; // data is NOT sorted
-    private Node<E> last;
+    private final Node HEADER; // data is NOT sorted
 
     public PQ() {
-        HEADER = new Node<E>(null, null);
-        last = HEADER;
+        HEADER = new Node(null, null);
     }
 
     /**
@@ -19,8 +18,23 @@ public class PQ<E extends Comparable<E>> {
             throw new IllegalArgumentException("element cannot be null");
         }
 
-        last.next = new Node<E>(element, null);
-        last = last.next;
+        // search for the target solution, not updating if tied
+        Node curr = HEADER;
+        boolean inserted = false;
+
+        while (!inserted && curr.next != null) {
+            // look for the closest element greater than the given
+            if (curr.next.value.compareTo(element) > 0) {
+                curr.next = new Node(element, curr.next);
+                inserted = true;
+            }
+            
+            curr = curr.next;
+        }
+        // insert at end
+        if (!inserted) {
+            curr.next = new Node(element);
+        }
     }
 
     /**
@@ -29,48 +43,55 @@ public class PQ<E extends Comparable<E>> {
      * @return The element with the lowest priority.
      */
     public E dequeue() {
-        if (last == HEADER) {
-            throw new NoSuchElementException("Priority queue is empty");
+        if (HEADER.next.equals(null)) {
+            throw new NoSuchElementException("Cannot call dequeue on an empty PQ");
         }
 
-        // search for the min element, not updating if tied
-        Node<E> min = HEADER.next;
-        Node<E> prevMin = HEADER;
-        Node<E> curr = HEADER.next;
-        Node<E> prevCurr = HEADER;
-
-        while (curr != null) {
-            E currVal = curr.value;
-
-            if (min.value.compareTo(currVal) > 0) { // min > curr --> min = curr
-                min = curr;
-                prevMin = prevCurr;
-            }
-
-            prevCurr = curr;
-            curr = curr.next;
-        }
-        prevMin.next = min.next; // remove
-
-        if (min == last) {
-            last = prevMin;
-        }
-
-        return min.value;
+        E result = HEADER.next.value;
+        HEADER.next = HEADER.next.next;
+        return result;
     }
 
     /**
      * Tells us if the queue has a size of one.
      */
     public boolean isSizeOne() {
-        return last == HEADER.next;
+        // size is one iff HEADER.next.next is null, check if HEADER.next is !null to avoid errors
+        return HEADER.next == null ? false : HEADER.next.next == null;
     }
 
-    private class Node<E extends Comparable<E>> {
-        E value;
-        Node<E> next;
+    @Override
+    public String toString() {
+        if (HEADER.next == null) {
+            return "[]";
+        }
+        
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        builder.append(HEADER.next.value);
 
-        Node(E value, Node<E> next) {
+        Node curr = HEADER.next.next;
+
+        while (curr != null) {
+            builder.append(", ");
+            builder.append(curr.value);
+            curr = curr.next;
+        }
+
+        builder.append("]");
+        
+        return builder.toString();
+    }
+
+    private class Node {
+        E value;
+        Node next;
+
+        Node(E value) {
+            this(value, null);
+        }
+
+        Node(E value, Node next) {
             this.value = value;
             this.next = next;
         }

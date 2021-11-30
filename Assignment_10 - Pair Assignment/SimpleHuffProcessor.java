@@ -22,7 +22,6 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public class SimpleHuffProcessor implements IHuffProcessor {
-
     private IHuffViewer myViewer;
 
     private int[] freqs;
@@ -165,12 +164,14 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         // if the node is a leaf --> the code is complete and we can store it
         if (node.isLeaf()) {
             codes[node.getValue()] = new HuffCode(code);
+            myViewer.update("new code lol: " + node.getValue() + " " + code);
         }
         // otherwise recurse down child trees checking for leaves
         else {
             createCodes(codes, node.getLeft(), code + "0");
             createCodes(codes, node.getRight(), code + "1");
         }
+
         return codes;
     }
 
@@ -198,36 +199,64 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         // write format (SCF vs STF)
         bitsOut.writeBits(BITS_PER_INT, headerFormat);
 
+        int totalBitsWritten = BITS_PER_INT * 2;
+
         // write counts/tree according to format
         if (headerFormat == STORE_TREE) { // write tree
             bitsOut.writeBits(BITS_PER_INT, bitsOfTreeRepresentation());
-            writeTree(bitsOut, root);
+            totalBitsWritten += writeTree(bitsOut, root);
         } else if (headerFormat == STORE_COUNTS) { // write counts
-            for (int i = 0; i < IHuffConstants.ALPH_SIZE; i++) {
+            for (int i = 0; i < ALPH_SIZE; i++) {
                 bitsOut.writeBits(BITS_PER_INT, freqs[i]);
             }
+            
+            totalBitsWritten += BITS_PER_INT * ALPH_SIZE;
         }
 
         // write data
+        int bitsRead = bitsIn.readBits(BITS_PER_WORD);
 
+        while (bitsRead != -1) {
+            HuffCode code = codes[bitsRead];
+            bitsOut.writeBits(code.numBits, code.value);
+            totalBitsWritten += code.numBits;
+        }
         
-
         // write PEOF
+        HuffCode peofCode = codes[PSEUDO_EOF];
+        bitsOut.writeBits(peofCode.numBits, peofCode.value);
+        totalBitsWritten += peofCode.numBits;
 
-        return 0;
+        bitsIn.close();
+        bitsOut.close();
+        return totalBitsWritten;
     }
 
-    private void writeTree(BitOutputStream bitsOut, TreeNode node) {
+    /**
+     * Writes the subtree at node to bitsOut and return the total # of bits written
+     * 
+     * @param bitsOut the BitOutputStream to write to
+     * @param node the subtree we are printing
+     * @return the total # of bits writen
+     */
+    private int writeTree(BitOutputStream bitsOut, TreeNode node) {
         if (node != null) {
+            int bitsWritten = 1;
+
             if (node.isLeaf()) {
                 bitsOut.writeBits(1, 1);
-                bitsOut.writeBits(9, node.getValue());
+                bitsOut.writeBits(BITS_PER_WORD + 1, node.getValue());
+                bitsWritten += BITS_PER_WORD + 1;
             } else {
                 // preorder: this --> left --> right
                 bitsOut.writeBits(1, 0);
-                writeTree(bitsOut, node.getLeft());
-                writeTree(bitsOut, node.getRight());
+                bitsWritten += writeTree(bitsOut, node.getLeft());
+                bitsWritten += writeTree(bitsOut, node.getRight());
             }
+
+            return bitsWritten;
+        } else {
+            return 0;
         }
     }
 

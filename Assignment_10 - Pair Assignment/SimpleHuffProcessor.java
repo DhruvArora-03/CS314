@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public class SimpleHuffProcessor implements IHuffProcessor {
+    private final boolean DISPLAY_UPDATES_TO_VIEWER = true;
+
     private IHuffViewer myViewer;
 
     private int[] freqs;
@@ -45,7 +47,10 @@ public class SimpleHuffProcessor implements IHuffProcessor {
      * @throws IOException if an error occurs while reading from the input file.
      */
     public int preprocessCompress(InputStream in, int headerFormat) throws IOException {
-        myViewer.update("Running preprocessCompress");
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Running preprocessCompress");
+        }
+
         // find frequencies of each 8 bit chunk
         BitInputStream bitsIn = new BitInputStream(in);
         freqs = new int[ALPH_SIZE];
@@ -56,16 +61,22 @@ public class SimpleHuffProcessor implements IHuffProcessor {
             readBits = bitsIn.readBits(BITS_PER_WORD);
         }
 
-        myViewer.update("found freqs: " + Arrays.toString(freqs));
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("found freqs");
+        }
 
         root = createTreeFromFreqs(freqs);
 
-        myViewer.update("created tree toString of root: " + root.toString());
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("created tree");
+        }
 
         // store the codes of each character
         codes = createCodes(new HuffCode[ALPH_SIZE + 1], root, ""); // + 1 for PEOF
 
-        myViewer.update("created codes\n" + Arrays.toString(codes));
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("created codes");
+        }
 
         // save headerFormat
         this.headerFormat = headerFormat;
@@ -164,7 +175,6 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         // if the node is a leaf --> the code is complete and we can store it
         if (node.isLeaf()) {
             codes[node.getValue()] = new HuffCode(code);
-            myViewer.update("new code lol: " + node.getValue() + " " + code);
         }
         // otherwise recurse down child trees checking for leaves
         else {
@@ -209,7 +219,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
             for (int i = 0; i < ALPH_SIZE; i++) {
                 bitsOut.writeBits(BITS_PER_INT, freqs[i]);
             }
-            
+
             totalBitsWritten += BITS_PER_INT * ALPH_SIZE;
         }
 
@@ -220,8 +230,10 @@ public class SimpleHuffProcessor implements IHuffProcessor {
             HuffCode code = codes[bitsRead];
             bitsOut.writeBits(code.numBits, code.value);
             totalBitsWritten += code.numBits;
+
+            bitsRead = bitsIn.readBits(BITS_PER_WORD);
         }
-        
+
         // write PEOF
         HuffCode peofCode = codes[PSEUDO_EOF];
         bitsOut.writeBits(peofCode.numBits, peofCode.value);
@@ -274,8 +286,11 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         BitInputStream bitsIn = new BitInputStream(in);
         BitOutputStream bitsOut = new BitOutputStream(out);
         if (!(bitsIn.readBits(BITS_PER_INT) == MAGIC_NUMBER)) {
-            myViewer.showError("Error reading compressed file. \n"
-                    + "File did not start with the huff magic number.");
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.showError("Error reading compressed file. \n"
+                        + "File did not start with the huff magic number.");
+            }
+
             bitsIn.close();
             bitsOut.close();
             return -1;
@@ -287,20 +302,28 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         if (format == STORE_TREE) {
             // read # of bits val from data
             int sizeOfTree = bitsIn.readBits(BITS_PER_INT);
-            myViewer.update("Size of uncompressing tree " + sizeOfTree);
+
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Size of uncompressing tree " + sizeOfTree);
+            }
+
             tree = readSTF(bitsIn);
         } else if (format == STORE_COUNTS) {
             tree = readSCF(bitsIn);
         }
 
-        myViewer.update(String.format("Uncompressed %s data and created new tree for decoding.",
-                format == STORE_TREE ? "tree" : "freq"));
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update(String.format("Uncompressed %s data and created new tree for decoding.",
+                    format == STORE_TREE ? "tree" : "freq"));
+        }
 
         // read bits and use the tree to convert to original data
 
         int bitsWritten = decode(tree, bitsIn, bitsOut);
 
-        myViewer.update("uncompressing complete :)");
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("uncompressing complete :)");
+        }
 
         bitsIn.close();
         bitsOut.close();
@@ -343,7 +366,6 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         // otherwise the bit we read represents a leaf
         else {
             int val = bitsIn.readBits(BITS_PER_WORD + 1);
-            myViewer.update(" " + val);
             return new TreeNode(val, -1); // all freq = -1 because they no longer matter
         }
     }
@@ -390,8 +412,11 @@ public class SimpleHuffProcessor implements IHuffProcessor {
     }
 
     private void showString(String s) {
-        if (myViewer != null)
-            myViewer.update(s);
+        if (myViewer != null) {
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update(s);
+            }
+        }
     }
 
     private class HuffCode {

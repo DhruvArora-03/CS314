@@ -16,7 +16,7 @@ public class Diff {
     }
 
     public static void doDiffer(File[] files, DiffStats ds) {
-        final int BITS_PER_BYTE = 8;
+        final int BITS_PER_BYTE = 1;
         try {
             ProgressMonitorInputStream stream1 =
                 new ProgressMonitorInputStream(
@@ -41,8 +41,8 @@ public class Diff {
                     if (ds.firstDiff == -1)
                         ds.firstDiff = bytesRead;
                 }
-                x = b1.readBits(8);
-                y = b2.readBits(8);
+                x = b1.readBits(BITS_PER_BYTE);
+                y = b2.readBits(BITS_PER_BYTE);
                 bytesRead++;
             }
             bytesRead--; // last read didn't work

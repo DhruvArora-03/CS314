@@ -1,3 +1,5 @@
+package testing;
+
 //
 // A11Test_Huffman.java -- Java class A11Test_Huffman
 // Project A11Test_Huffman
@@ -44,7 +46,7 @@ import edu.utexas.cs.bevotest.BevoTest.Test;
  */
 public class A10_Huffman_Test_Student_Version {
 
-    private static final String DIRECTORY_NAME      = "StudentTestFiles"; // change if you create a different directory
+    private static final String DIRECTORY_NAME      = "/u/dhruv03/Github/CS314/Assignment_10 - Pair Assignment/testing/FilesForStudentTest"; // change if you create a different directory
     private static final String SMALL_FILE_NAME     = "smallFile";
     private static final String TREE_TEST_FILE_NAME = "TreeTestFile.bmp";
     private static final File testInputDir          = new File(DIRECTORY_NAME);

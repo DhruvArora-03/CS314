@@ -1,3 +1,4 @@
+package testing;
 
 //
 // HuffViewer.java -- Java class HuffViewer

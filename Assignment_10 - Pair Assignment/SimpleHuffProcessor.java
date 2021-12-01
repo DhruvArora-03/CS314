@@ -19,7 +19,6 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class SimpleHuffProcessor implements IHuffProcessor {
     private final boolean DISPLAY_UPDATES_TO_VIEWER = true;
@@ -30,6 +29,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
     private TreeNode root;
     private HuffCode[] codes;
     private int headerFormat;
+    private int bitsSaved;
 
     /**
      * Preprocess data so that compression is possible --- count characters/create tree/store state
@@ -83,7 +83,8 @@ public class SimpleHuffProcessor implements IHuffProcessor {
 
         bitsIn.close();
 
-        return calculateSavedBits(headerFormat);
+        bitsSaved = calculateSavedBits(headerFormat);
+        return bitsSaved;
     }
 
     private int calculateSavedBits(int headerFormat) {
@@ -200,14 +201,35 @@ public class SimpleHuffProcessor implements IHuffProcessor {
      *         output file.
      */
     public int compress(InputStream in, OutputStream out, boolean force) throws IOException {
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Running preprocessCompress");
+        }
+
+        // if not forcing --> ensure we will save bits before compressing
+        if (!force && bitsSaved <= 0) {
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Not compressing since no bits will be saved.");
+            }
+
+            return 0;
+        } 
+
         BitInputStream bitsIn = new BitInputStream(in);
         BitOutputStream bitsOut = new BitOutputStream(out);
 
         // write the magic number
         bitsOut.writeBits(BITS_PER_INT, MAGIC_NUMBER);
 
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Wrote magic number");
+        }
+
         // write format (SCF vs STF)
         bitsOut.writeBits(BITS_PER_INT, headerFormat);
+
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Wrote const for the format of tree data");
+        }
 
         int totalBitsWritten = BITS_PER_INT * 2;
 

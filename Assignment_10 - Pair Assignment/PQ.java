@@ -1,5 +1,4 @@
 import java.util.NoSuchElementException;
-import javax.sound.sampled.SourceDataLine;
 
 public class PQ<E extends Comparable<E>> {
     private final Node HEADER; // data is NOT sorted

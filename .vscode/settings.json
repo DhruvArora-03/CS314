@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "Assignment_10 - Pair Assignment/testing/bevotest.jar"
+    ]
+}

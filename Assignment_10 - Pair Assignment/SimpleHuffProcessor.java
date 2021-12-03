@@ -19,10 +19,9 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class SimpleHuffProcessor implements IHuffProcessor {
-    private final boolean DISPLAY_UPDATES_TO_VIEWER = true;
+    private final boolean DISPLAY_UPDATES_TO_VIEWER = false;
 
     private IHuffViewer myViewer;
 
@@ -30,6 +29,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
     private TreeNode root;
     private HuffCode[] codes;
     private int headerFormat;
+    private int bitsSaved;
 
     /**
      * Preprocess data so that compression is possible --- count characters/create tree/store state
@@ -83,7 +83,8 @@ public class SimpleHuffProcessor implements IHuffProcessor {
 
         bitsIn.close();
 
-        return calculateSavedBits(headerFormat);
+        bitsSaved = calculateSavedBits(headerFormat);
+        return bitsSaved;
     }
 
     private int calculateSavedBits(int headerFormat) {
@@ -91,6 +92,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
 
         if (headerFormat == STORE_TREE) {
             compressedBits += bitsOfTreeRepresentation();
+            compressedBits += BITS_PER_INT;
         } else if (headerFormat == STORE_COUNTS) {
             // SCF BITS PER INT * ALPH_SIZE
             compressedBits += BITS_PER_INT * ALPH_SIZE;
@@ -116,10 +118,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
      * @return the number of bits that would be used to write the tree in STF
      */
     private int bitsOfTreeRepresentation() {
-        int bits = 0;
-
-        // STF BITS_PER_INT for size of tree + 1 per node, + 9 per leaf
-        bits += BITS_PER_INT;
+        int bits = 0; // 1 per node, + 9 per leaf
 
         // # of nodes is size of the tree which is the value of the root
         bits += root.getValue();
@@ -200,27 +199,63 @@ public class SimpleHuffProcessor implements IHuffProcessor {
      *         output file.
      */
     public int compress(InputStream in, OutputStream out, boolean force) throws IOException {
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Running compress");
+        }
+
+        // if not forcing --> ensure we will save bits before compressing
+        if (!force && bitsSaved <= 0) {
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Not compressing since no bits will be saved.");
+            }
+
+            return 0;
+        }
+
         BitInputStream bitsIn = new BitInputStream(in);
         BitOutputStream bitsOut = new BitOutputStream(out);
 
         // write the magic number
         bitsOut.writeBits(BITS_PER_INT, MAGIC_NUMBER);
 
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Wrote magic number");
+        }
+
         // write format (SCF vs STF)
         bitsOut.writeBits(BITS_PER_INT, headerFormat);
+
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Wrote const for the format of tree data");
+        }
 
         int totalBitsWritten = BITS_PER_INT * 2;
 
         // write counts/tree according to format
         if (headerFormat == STORE_TREE) { // write tree
             bitsOut.writeBits(BITS_PER_INT, bitsOfTreeRepresentation());
+
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Wrote bits of tree representation: " + bitsOfTreeRepresentation());
+            }
+
+            totalBitsWritten += BITS_PER_INT;
             totalBitsWritten += writeTree(bitsOut, root);
+
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Wrote tree");
+            }
+
         } else if (headerFormat == STORE_COUNTS) { // write counts
             for (int i = 0; i < ALPH_SIZE; i++) {
                 bitsOut.writeBits(BITS_PER_INT, freqs[i]);
             }
 
             totalBitsWritten += BITS_PER_INT * ALPH_SIZE;
+
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Wrote all freqs");
+            }
         }
 
         // write data
@@ -234,10 +269,18 @@ public class SimpleHuffProcessor implements IHuffProcessor {
             bitsRead = bitsIn.readBits(BITS_PER_WORD);
         }
 
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Wrote all data using the codes");
+        }
+
         // write PEOF
         HuffCode peofCode = codes[PSEUDO_EOF];
         bitsOut.writeBits(peofCode.numBits, peofCode.value);
         totalBitsWritten += peofCode.numBits;
+
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Wrote PEOF - compressing complete :)");
+        }
 
         bitsIn.close();
         bitsOut.close();
@@ -296,25 +339,34 @@ public class SimpleHuffProcessor implements IHuffProcessor {
             return -1;
         }
 
+        if (DISPLAY_UPDATES_TO_VIEWER) {
+            myViewer.update("Read and verified magic number");
+        }
+
         // check if we are using SCF or STF and create the appropriate tree
         int format = bitsIn.readBits(BITS_PER_INT);
         TreeNode tree = null;
         if (format == STORE_TREE) {
             // read # of bits val from data
-            int sizeOfTree = bitsIn.readBits(BITS_PER_INT);
+            int numOfBitsForTreeRepresentation = bitsIn.readBits(BITS_PER_INT);
 
             if (DISPLAY_UPDATES_TO_VIEWER) {
-                myViewer.update("Size of uncompressing tree " + sizeOfTree);
+                myViewer.update("Read num bits of uncompressing tree representation "
+                        + numOfBitsForTreeRepresentation);
             }
 
             tree = readSTF(bitsIn);
+
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Read and created tree from STF data");
+            }
+
         } else if (format == STORE_COUNTS) {
             tree = readSCF(bitsIn);
-        }
 
-        if (DISPLAY_UPDATES_TO_VIEWER) {
-            myViewer.update(String.format("Uncompressed %s data and created new tree for decoding.",
-                    format == STORE_TREE ? "tree" : "freq"));
+            if (DISPLAY_UPDATES_TO_VIEWER) {
+                myViewer.update("Read freqs and created tree from SCF data");
+            }
         }
 
         // read bits and use the tree to convert to original data
@@ -322,7 +374,7 @@ public class SimpleHuffProcessor implements IHuffProcessor {
         int bitsWritten = decode(tree, bitsIn, bitsOut);
 
         if (DISPLAY_UPDATES_TO_VIEWER) {
-            myViewer.update("uncompressing complete :)");
+            myViewer.update("Read codes and regenerated the original - uncompressing complete :)");
         }
 
         bitsIn.close();

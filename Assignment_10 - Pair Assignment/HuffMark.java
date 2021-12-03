@@ -29,7 +29,7 @@ public class HuffMark {
         myHuffer.preprocessCompress(getFastByteReader(f), IHuffProcessor.STORE_COUNTS);
         File outFile = new File(getCompressedName(f));
         FileOutputStream out = new FileOutputStream(outFile);
-        System.out.println("compressing to: "+outFile.getCanonicalPath());
+        // System.out.println("compressing to: "+outFile.getCanonicalPath());
         myHuffer.compress(getFastByteReader(f), out,true);
         double end = System.currentTimeMillis();
         double time = (end-start)/1000.0;
@@ -38,7 +38,7 @@ public class HuffMark {
         myTotalCompressedBytes += outFile.length();
         myTotalCompressTime += time;
         
-        System.out.printf("%s from\t %d to\t %d in\t %.3f\n",f.getName(),f.length(),outFile.length(),time);
+        System.out.printf("%s from\t %d to\t %d in\t %.3f w/ ratio %.3f\n",f.getName(),f.length(),outFile.length(),time, 1.0 * outFile.length() / f.length());
         
     }
     

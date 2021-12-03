@@ -1,0 +1,85 @@
+Data from running on Books and HTML
+
+A7_Recursion.html from   41163 to        26189 in        0.701 w/ ratio 0.636
+CiaFactBook2000.txt from         3393774 to      2175486 in      66.424 w/ ratio 0.641
+ThroughTheLookingGlass.txt from  183644 to       106349 in       3.307 w/ ratio 0.579
+jnglb10.txt from         285980 to       163276 in       5.189 w/ ratio 0.571
+kjv10.txt from   4345020 to      2489768 in      81.715 w/ ratio 0.573
+melville.txt from        82140 to        47364 in        1.574 w/ ratio 0.577
+quotes.htm from  61563 to        38423 in        1.148 w/ ratio 0.624
+rawMovieGross.txt from   103884 to       46535 in        1.481 w/ ratio 0.448
+revDictionary.txt from   1016714 to      542524 in       16.544 w/ ratio 0.534
+syllabus.htm from        32668 to        20798 in        0.628 w/ ratio 0.637
+test.txt from    26 to   1044 in         0.028 w/ ratio 40.154
+CiaFactBook2000.txt.unhf from    3393774 to      2175486 in      65.277 w/ ratio 0.641
+--------
+total bytes read: 12940350
+total compressed bytes 7833242
+total percent compression 39.467
+compression time: 244.016
+
+
+Data from running on waterloo:
+
+clegg.tif from   2149096 to      2034595 in      68.436 w/ ratio 0.947
+frymire.tif from         3706306 to      2188593 in      65.184 w/ ratio 0.591
+lena.tif from    786568 to       766146 in       23.451 w/ ratio 0.974
+monarch.tif from         1179784 to      1109973 in      35.096 w/ ratio 0.941
+peppers.tif from         786568 to       756968 in       23.568 w/ ratio 0.962
+sail.tif from    1179784 to      1085501 in      34.509 w/ ratio 0.920
+serrano.tif from         1498414 to      1127645 in      33.622 w/ ratio 0.753
+tulips.tif from  1179784 to      1135861 in      35.147 w/ ratio 0.963
+peppers.tif.unhf from    786568 to       756968 in       22.708 w/ ratio 0.962
+serrano.tif.unhf from    1498414 to      1127645 in      33.843 w/ ratio 0.753
+--------
+total bytes read: 14751286
+total compressed bytes 12089895
+total percent compression 18.042
+compression time: 375.564
+
+data from running on calgary:
+
+bib from      111261 to  73795 in        1.905 w/ ratio 0.663
+book1 from    768771 to  439409 in       11.061 w/ ratio 0.572
+book2 from    610856 to  369335 in       8.992 w/ ratio 0.605
+geo from      102400 to  73592 in        2.052 w/ ratio 0.719
+news from     377109 to  247428 in       7.346 w/ ratio 0.656
+obj1 from     21504 to   17085 in        0.463 w/ ratio 0.795
+obj2 from     246814 to  195131 in       5.341 w/ ratio 0.791
+paper1 from   53161 to   34371 in        0.991 w/ ratio 0.647
+paper2 from   82199 to   48649 in        1.372 w/ ratio 0.592
+paper3 from   46526 to   28309 in        0.268 w/ ratio 0.608
+paper4 from   13286 to   8894 in         0.128 w/ ratio 0.669
+paper5 from   11954 to   8465 in         0.223 w/ ratio 0.708
+paper6 from   38105 to   25057 in        0.676 w/ ratio 0.658
+pic from      513216 to  107586 in       2.988 w/ ratio 0.210
+progc from    39611 to   26948 in        0.622 w/ ratio 0.680
+progl from    71646 to   44017 in        1.064 w/ ratio 0.614
+progp from    49379 to   31248 in        0.758 w/ ratio 0.633
+trans from    93695 to   66252 in        1.688 w/ ratio 0.707
+--------
+total bytes read: 3251493
+total compressed bytes 1845571
+total percent compression 43.239
+compression time: 47.938
+
+
+data from compressing .hf files in books and HTML:
+
+test.txt.hf from         1044 to         1178 in         0.027 w/ ratio 1.128
+A7_Recursion.html.hf from        26189 to        26340 in        0.863 w/ ratio 1.006
+CiaFactBook2000.txt.hf from      2175486 to      2165402 in      61.842 w/ ratio 0.995
+ThroughTheLookingGlass.txt.hf from       106349 to       105816 in       2.972 w/ ratio 0.995
+jnglb10.txt.hf from      163276 to       161554 in       4.640 w/ ratio 0.989
+kjv10.txt.hf from        2489768 to      2452980 in      70.259 w/ ratio 0.985
+melville.txt.hf from     47364 to        47551 in        1.370 w/ ratio 1.004
+quotes.htm.hf from       38423 to        39036 in        1.243 w/ ratio 1.016
+rawMovieGross.txt.hf from        46535 to        46570 in        1.303 w/ ratio 1.001
+revDictionary.txt.hf from        542524 to       539342 in       15.433 w/ ratio 0.994
+syllabus.htm.hf from     20798 to        21256 in        0.622 w/ ratio 1.022
+CiaFactBook2000.txt.unhf.hf from         2175486 to      2165402 in      59.688 w/ ratio 0.995
+--------
+total bytes read: 7833242
+total compressed bytes 7772427
+total percent compression 0.776
+compression time: 220.262

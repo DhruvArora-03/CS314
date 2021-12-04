@@ -1,8 +1,29 @@
+/**
+ * Student information for assignment:
+ *
+ * On OUR honor, Dhruv and Rohit, this programming assignment is our own work and WE have not
+ * provided this code to any other student.
+ *
+ * Number of slip days used: 1
+ *
+ * Student 1 (Student whose turnin account is being used) <br>
+ * UTEID: da32895 <br>
+ * email address: dhruvarora@utexas.edu <br>
+ * Grader name: Grace <br>
+ *
+ * Student 2 <br>
+ * UTEID: ra38355 <br>
+ * email address: anantha.rohit.11@gmail.com <br>
+ */
+
 import java.util.NoSuchElementException;
 
 public class PQ<E extends Comparable<E>> {
-    private final Node HEADER; // data is NOT sorted
+    private final Node HEADER;
 
+    /**
+     * Constructor for PQ
+     */
     public PQ() {
         HEADER = new Node(null, null);
     }
@@ -23,14 +44,15 @@ public class PQ<E extends Comparable<E>> {
 
         while (!inserted && curr.next != null) {
             // look for the closest element greater than the given
-            if (curr.next.value.compareTo(element) > 0) {
+            if (curr.next.VALUE.compareTo(element) > 0) {
                 curr.next = new Node(element, curr.next);
                 inserted = true;
             }
-            
+
             curr = curr.next;
         }
-        // insert at end
+
+        // !inserted --> insert at end
         if (!inserted) {
             curr.next = new Node(element);
         }
@@ -46,8 +68,10 @@ public class PQ<E extends Comparable<E>> {
             throw new NoSuchElementException("Cannot call dequeue on an empty PQ");
         }
 
-        E result = HEADER.next.value;
-        HEADER.next = HEADER.next.next;
+        // remove the first element and return it
+        E result = HEADER.next.VALUE;
+        HEADER.next = HEADER.next.next; // fix HEADER reference
+
         return result;
     }
 
@@ -59,39 +83,47 @@ public class PQ<E extends Comparable<E>> {
         return HEADER.next == null ? false : HEADER.next.next == null;
     }
 
+    /**
+     * Returns a String representation of the Priority Queue in the form [item1, item2, ... itemN]
+     */
     @Override
     public String toString() {
+        // handle case of empty queue
         if (HEADER.next == null) {
             return "[]";
         }
-        
+
         StringBuilder builder = new StringBuilder();
         builder.append("[");
-        builder.append(HEADER.next.value);
+        builder.append(HEADER.next.VALUE); // fix fencepost problem
 
         Node curr = HEADER.next.next;
 
+        // iterate through the rest of the queue adding values
         while (curr != null) {
             builder.append(", ");
-            builder.append(curr.value);
+            builder.append(curr.VALUE);
             curr = curr.next;
         }
 
         builder.append("]");
-        
+
         return builder.toString();
     }
 
+    /**
+     * The internal storage container for our linked list for our priority queue.
+     */
     private class Node {
-        E value;
-        Node next;
+        final E VALUE; // the value never changes after initialization
+        Node next; // however, the next reference does
 
         Node(E value) {
             this(value, null);
         }
 
         Node(E value, Node next) {
-            this.value = value;
+            this.VALUE = value;
             this.next = next;
         }
     }

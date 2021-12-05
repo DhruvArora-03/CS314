@@ -151,7 +151,6 @@ public class Graph {
         }
     }
 
-
     // Set up queue and instance variables to find
     // unweighted shortest path algorithm from startName vertex
     // to every other Vertex we can reach.
@@ -274,13 +273,44 @@ public class Graph {
      *        be 1.)
      */
     public void findAllPaths(boolean weighted) {
-        if (!weighted) {
-            findUnweightedShortestPath(currentStartVertexName);
-        } else {
-            dijkstra(currentStartVertexName);
+        allPathsFound = true;
+        
+        // init vars for finding longest
+        int longestDistance = 0;
+        longest = new Path(vertices.get(currentStartVertexName), 0);
+
+        for (String startName: vertices.keySet()) {
+            clearAll();
+            // calc all paths from current starting to others
+            if (weighted) {
+                dijkstra(startName);
+            } else {
+                findUnweightedShortestPath(startName);
+            }
+            Vertex start = vertices.get(startName);
+            start.numVertexConnected = 0;
+            start.totalUnweightedPathLength = 0;
+            start.totalWeightedPathLength = 0;
+            
+            // count all paths to other connected verticies and check for longest
+            for (String name: vertices.keySet()) {
+                // check if current vertex is connected to start
+                if (findPath(name).size() > 1) {
+                    Vertex vertex = vertices.get(name);
+                    start.numVertexConnected++;
+                    start.totalUnweightedPathLength += vertex.numEdgesFromStartVertex;
+                    start.totalWeightedPathLength += vertex.weightedCostFromStartVertex;
+                    
+                    // check if the path to this vertex is the longest
+                    List<String> path = findPath(name);
+                    if (path.size() > longestDistance) {
+                        longestDistance = path.size();
+                        longest = getPath(name);
+                    }
+                }
+            }
         }
 
-        allPathsFound = true;
     }
 
     /*
@@ -370,7 +400,6 @@ public class Graph {
         return result;
     }
 
-
     /**
      * Get all path statistics for all vertices in this graph that are connected to one or more
      * other vertices. Vertices are ordered by centrality. For this method the most central nodes is
@@ -399,7 +428,6 @@ public class Graph {
         return result;
     }
 
-
     /**
      * Check if a vertex with the given name is present in this graph. <br>
      * pre: name != null
@@ -410,7 +438,6 @@ public class Graph {
     public boolean containsVertex(String name) {
         return vertices.containsKey(name);
     }
-
 
     /**
      * Return the name of the current start vertex. <br>
@@ -426,7 +453,6 @@ public class Graph {
         }
         return this.currentStartVertexName;
     }
-
 
     /**
      * Alternative to printPath that returns an List containing the path from the current start
@@ -459,7 +485,6 @@ public class Graph {
         }
         return result;
     }
-
 
     // helper method to find path.
     private void findPath(List<String> result, Vertex end) {

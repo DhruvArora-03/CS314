@@ -202,27 +202,20 @@ public class Graph {
                     "No Vertex named " + startName + " exists in this Graph");
         }
 
-        clearAll();
-        currentStartVertexName = startName;
-
-        PriorityQueue<Path> pq = new PriorityQueue<>();
-        Vertex start = vertices.get(startName);
-        start.weightedCostFromStartVertex = 0;
-        start.numEdgesFromStartVertex = 0;
-        pq.add(new Path(start, 0));
+        PriorityQueue<Path> pq = prepareForDijkstra(startName);
 
         // go until all possible verities are explored
         while (!pq.isEmpty()) {
             // only check the next available path if the vertex has NOT been explored
             Path path = pq.remove();
-            if (path.dest.scratch == 0 ) {
+            if (path.dest.scratch == 0) {
                 path.dest.scratch++;
                 Vertex current = path.dest;
-    
+
                 // look at edges from current to others
-                for (Edge edge: current.adjacent) {
+                for (Edge edge : current.adjacent) {
                     // compare dest's current cost to potential cost
-                    Double newCost = current.weightedCostFromStartVertex + edge.cost; 
+                    Double newCost = current.weightedCostFromStartVertex + edge.cost;
                     if (newCost < edge.dest.weightedCostFromStartVertex) {
                         // update dest's cost/numEdgesFromStart/prev and add it to path
                         edge.dest.weightedCostFromStartVertex = newCost;
@@ -233,6 +226,26 @@ public class Graph {
                 }
             }
         }
+    }
+
+    /**
+     * Prepare variables and create the PriorityQueue<Path> for the dijkstra algorithm
+     * 
+     * @param startName the name of the start vertex
+     * @return a PriorityQueue<Path> containing a single 0-length Path obj of the start vertex
+     */
+    private PriorityQueue<Path> prepareForDijkstra(String startName) {
+        clearAll();
+        currentStartVertexName = startName;
+
+        // create PQ and add a Path of just the starting vertex
+        PriorityQueue<Path> pq = new PriorityQueue<>();
+        Vertex start = vertices.get(startName);
+        start.weightedCostFromStartVertex = 0;
+        start.numEdgesFromStartVertex = 0;
+        pq.add(new Path(start, 0));
+
+        return pq;
     }
 
     /**
@@ -274,43 +287,41 @@ public class Graph {
      */
     public void findAllPaths(boolean weighted) {
         allPathsFound = true;
-        
-        // init vars for finding longest
-        int longestDistance = 0;
-        longest = new Path(vertices.get(currentStartVertexName), 0);
 
-        for (String startName: vertices.keySet()) {
-            clearAll();
+        // init vars for finding longest
+        double highestCost = 0.0;
+        longest = new Path(); // 'default'
+
+        for (String startName : vertices.keySet()) {
             // calc all paths from current starting to others
             if (weighted) {
                 dijkstra(startName);
             } else {
                 findUnweightedShortestPath(startName);
             }
-            Vertex start = vertices.get(startName);
-            start.numVertexConnected = 0;
-            start.totalUnweightedPathLength = 0;
-            start.totalWeightedPathLength = 0;
-            
+
             // count all paths to other connected verticies and check for longest
-            for (String name: vertices.keySet()) {
+            Vertex start = vertices.get(startName);
+            start.clearPathInfo();
+
+            for (String name : vertices.keySet()) {
                 // check if current vertex is connected to start
-                if (findPath(name).size() > 1) {
+                if (getNumEdgesFromStart(name) > 0) {
+                    // increment counting vars accordingly
                     Vertex vertex = vertices.get(name);
                     start.numVertexConnected++;
                     start.totalUnweightedPathLength += vertex.numEdgesFromStartVertex;
                     start.totalWeightedPathLength += vertex.weightedCostFromStartVertex;
-                    
+
                     // check if the path to this vertex is the longest
-                    List<String> path = findPath(name);
-                    if (path.size() > longestDistance) {
-                        longestDistance = path.size();
+                    double cost = getWeightedCostFromStart(name);
+                    if (cost > highestCost) {
+                        highestCost = cost;
                         longest = getPath(name);
                     }
                 }
             }
         }
-
     }
 
     /*

@@ -34,7 +34,6 @@ import java.util.TreeSet;
  *
  */
 public class FootballRanker {
-
     private final static double ROUNDING_FACTOR = 10.0;
 
     // only include teams in final rankings with this many wins
@@ -62,7 +61,6 @@ public class FootballRanker {
     private Map<String, FootballRecord> records;
     private List<String> actualRanks;
 
-
     /**
      * Create a new FootballRanker based on the given files. Format of file is: <br>
      * Date,Home Team Name,Home Team Points,Away Team Name,Away Team Points,Location if neutral.
@@ -86,7 +84,6 @@ public class FootballRanker {
 
     }
 
-
     /**
      * Calculate top teams based solely on average path length of unweighted shortest paths.
      * 
@@ -106,7 +103,6 @@ public class FootballRanker {
         }
         return printRootMeanSquareError(actualRanks, paths, showResults);
     }
-
 
     /**
      * Calculate top teams based on average path length of weighted shortest paths. This takes into
@@ -152,7 +148,6 @@ public class FootballRanker {
         return printRootMeanSquareError(actualRanks, paths, showResults);
     }
 
-
     // show results of calculations
     private void showResults(Set<AllPathsInfo> paths) {
         System.out.println("\n\n***** TOP TEAMS *****");
@@ -161,8 +156,6 @@ public class FootballRanker {
             System.out.println("predicted rank: " + (rank++) + ", " + team);
         }
     }
-
-
 
     /*
      * Calculate difference between predicted results based on graph and actual results of poll
@@ -175,6 +168,7 @@ public class FootballRanker {
             System.out.println("\n\n ***** PREDICTED VS. ACTUAL RESULTS *****");
         }
 
+        // sum up squared differences
         double result = 0.0;
 
         for (int actual = 0; actual < humanRanks.size(); actual++) {
@@ -182,21 +176,22 @@ public class FootballRanker {
             result += Math.pow((actual + 1) - predicted, 2);
 
             if (showResults) {
-                System.out.printf("%-21s- actual rank: %d predicted rank: %d\n",
+                System.out.printf("%-" + PADDING + "s - actual rank: %d predicted rank: %d\n",
                         humanRanks.get(actual), actual + 1, predicted);
             }
         }
 
+        // divide for 'mean' and sqrt for 'square'
         result /= humanRanks.size();
         result = Math.sqrt(result);
 
         if (showResults) {
-            System.out.println("Root Mean Square Error: " + result);
+            System.out.println("Root Mean Square Error: " + ourFormatter.format(result));
         }
 
+        // round to nearest ROUNDING_FACTOR
         return Math.round(result * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
-
 
     private int findRankInSet(TreeSet<AllPathsInfo> paths, String target) {
         int rank = 1;
@@ -212,7 +207,6 @@ public class FootballRanker {
         // if target is never found --> return # of paths + 1
         return rank;
     }
-
 
     public void processRequests() {
         Scanner in = new Scanner(System.in);
@@ -254,7 +248,6 @@ public class FootballRanker {
         return answer != null && answer.length() > 0 && answer.charAt(0) == 'y';
     }
 
-
     private List<String> getActual(String filename) {
         List<String> result = new ArrayList<>();
         try {
@@ -273,7 +266,6 @@ public class FootballRanker {
         return result;
     }
 
-
     private TreeSet<AllPathsInfo> rankByScoreAdjustWinPercentage(Set<AllPathsInfo> paths) {
 
         TreeSet<AllPathsInfo> result = new TreeSet<>(new AveCostComparator());
@@ -290,7 +282,6 @@ public class FootballRanker {
         return result;
     }
 
-
     private TreeSet<AllPathsInfo> rankByScore(Set<AllPathsInfo> paths) {
 
         TreeSet<AllPathsInfo> result = new TreeSet<>(new AveCostComparator());
@@ -304,7 +295,6 @@ public class FootballRanker {
         }
         return result;
     }
-
 
     private Graph buildGraph(String gameResults) {
         Graph g = new Graph();
@@ -333,7 +323,6 @@ public class FootballRanker {
         return g;
     }
 
-
     private void addEdge(Graph g, String[] data, Map<String, FootballRecord> recordsMap,
             int scoreDiff) {
 
@@ -354,13 +343,11 @@ public class FootballRanker {
         }
     }
 
-
     private void addTeam(Map<String, FootballRecord> recordsMap, String name) {
         if (!recordsMap.containsKey(name)) {
             recordsMap.put(name, new FootballRecord(name));
         }
     }
-
 
     private static class AveCostComparator implements Comparator<AllPathsInfo> {
 

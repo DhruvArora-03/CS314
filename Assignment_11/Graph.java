@@ -29,7 +29,6 @@ import java.util.TreeSet;
  * @author scottm, based on the Graph class from Weiss Algorithms and Data Structures.
  */
 public class Graph {
-
     // used to indicate a vertex has not been visited and
     // that no path exists between current start vertex.
     private static final double INFINITY = Double.MAX_VALUE;
@@ -573,7 +572,6 @@ public class Graph {
         return longest.toString();
     }
 
-
     // helper. If name not present create new vertex.
     // return vertex with given name
     private Vertex getVertex(String name) {
@@ -584,7 +582,6 @@ public class Graph {
         }
         return v;
     }
-
 
     // reset all vertices to set new start vertex and find all paths
     // from new start
@@ -603,7 +600,6 @@ public class Graph {
         }
     }
 
-
     /**
      * Get the name of all vertices the Vertex with name is connected to. Not expected to use this
      * on assignment 12.
@@ -621,8 +617,6 @@ public class Graph {
         }
         return result;
     }
-
-
 
     // models edge between two vertices
     private static class Edge {
@@ -739,7 +733,6 @@ public class Graph {
             return null;
         }
     } // end of the Vertex class
-
 
     // Models a path between vertices.
     // Best not to try and store all paths for any but small graphs.

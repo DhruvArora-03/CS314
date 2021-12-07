@@ -18,7 +18,10 @@
  * last two methods are reasonable. However if all results from all college football teams are
  * included some unexpected results occur. Explain the unexpected results. You may have to do some
  * research on the various college football divisions to make an informed answer.
- *
+ * 
+ * If all of the games are included then we can get unexpected results like 
+ * 
+ * 
  * 2. Suggest another way of method of ranking teams using the results from the graph. Thoroughly
  * explain your method. The method can build on one of the three existing algorithms.
  *

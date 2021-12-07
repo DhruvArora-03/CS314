@@ -35,6 +35,8 @@ import java.util.TreeSet;
  */
 public class FootballRanker {
 
+    private final static double ROUNDING_FACTOR = 10.0;
+
     // only include teams in final rankings with this many wins
     private static final int MIN_WINS = 7;
 
@@ -192,7 +194,7 @@ public class FootballRanker {
             System.out.println("Root Mean Square Error: " + result);
         }
 
-        return Math.round(result * 10.0) / 10.0;
+        return Math.round(result * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 
 
